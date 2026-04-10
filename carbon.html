@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리드파트 ESG 및 탄소절감 보고서</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 1. 기본 설정 */
+        * {
+            box-sizing: border-box;
+        }
+
+        p {
+            margin: 0;
+            margin-bottom: 15px;
+        }
+
+        body {
+            background-color: #cbd5e1;
+            display: grid;
+            gap: 30px;
+            grid-template-columns: 1fr;
+            margin: 0;
+            padding: 40px 0;
+            place-items: center;
+        }
+
+        /* PPT 슬라이드 컨테이너 (16:9 비율, 1280x720) */
+        .slide-container {
+            align-items: center;
+            background-color: #f8fafc;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            font-family: 'Noto Sans KR', sans-serif;
+            height: 720px;
+            justify-content: center;
+            overflow: hidden;
+            padding: 60px 80px;
+            position: relative;
+            width: 1280px;
+        }
+
+        /* 배경 디자인 (은은한 ESG 그라데이션) */
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            right: -200px;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, rgba(248, 250, 252, 0) 70%);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .slide-container > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 2. 타이포그래피 */
+        .slide-container h1,
+        .slide-container h2,
+        .slide-container h3 {
+            color: #0f172a;
+            font-weight: 700;
+            font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+            margin: 0;
+        }
+
+        .slide-container h1 {
+            font-size: 64px;
+            letter-spacing: -1.5px;
+            line-height: 1.3;
+            margin-bottom: 20px;
+        }
+
+        .slide-container .slide-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 50px;
+            text-align: left;
+            width: 100%;
+            color: #0f172a;
+            border-bottom: 3px solid #10b981;
+            padding-bottom: 15px;
+            display: inline-block;
+        }
+
+        .slide-container h3 {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #047857;
+        }
+
+        .slide-container p,
+        .slide-container li,
+        .slide-container .subtitle {
+            color: #334155;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 20px;
+            line-height: 1.7;
+        }
+
+        .slide-container .subtitle {
+            font-weight: 500;
+            margin: 0 auto;
+            color: #047857;
+            font-size: 28px;
+        }
+
+        .slide-container .content-area {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* 3. 레이아웃 구조 */
+        .title-layout {
+            text-align: center;
+        }
+
+        .two-column {
+            align-items: center;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            width: 100%;
+        }
+
+        .two-column.tiled {
+            align-items: stretch;
+        }
+
+        .two-column.tiled > div {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            padding: 50px;
+            text-align: left;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+        }
+
+        .two-column ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .two-column li {
+            margin-bottom: 25px;
+            position: relative;
+            padding-left: 30px;
+            font-size: 20px;
+        }
+
+        .two-column li::before {
+            content: '•';
+            color: #10b981;
+            font-weight: bold;
+            font-size: 30px;
+            position: absolute;
+            left: 0;
+            top: -6px;
+        }
+
+        .image-wrapper {
+            border-radius: 16px;
+            height: 400px;
+            width: 100%;
+            overflow: hidden;
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        .image-wrapper img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .tiled-content {
+            align-items: stretch;
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .tile {
+            align-items: center;
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding: 50px 35px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+            transition: transform 0.3s ease;
+        }
+
+        .tile:hover {
+            transform: translateY(-5px);
+        }
+
+        .tile .icon {
+            color: #047857;
+            font-size: 50px;
+            margin-bottom: 30px;
+            background: #d1fae5;
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .full-bg-image {
+            background-position: center;
+            background-size: cover;
+        }
+
+        .full-bg-image .content-overlay {
+            text-align: center;
+            z-index: 2;
+        }
+
+        .full-bg-image h2,
+        .full-bg-image p {
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* 4. 강조된 숫자 레이아웃 */
+        .highlight-numbers-layout > div:first-child {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+        }
+
+        .highlight-numbers-layout .number {
+            color: #047857;
+            font-size: 160px;
+            font-weight: 800;
+            font-family: 'Poppins', sans-serif;
+            line-height: 1;
+            text-shadow: 4px 4px 0px #d1fae5;
+            margin-bottom: 10px;
+        }
+
+        .highlight-numbers-layout .number-label {
+            font-size: 26px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        /* 5. 차트 스타일링 */
+        .chart-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            width: 100%;
+        }
+
+        .bar {
+            align-items: center;
+            display: flex;
+            gap: 30px;
+        }
+
+        .bar .label {
+            color: #334155;
+            flex: 0 0 320px;
+            font-weight: 700;
+            text-align: right;
+            font-size: 22px;
+        }
+
+        .bar .bar-inner {
+            background-color: #e2e8f0;
+            border-radius: 10px;
+            flex-grow: 1;
+            height: 55px;
+            overflow: hidden;
+        }
+
+        .bar .bar-fill {
+            align-items: center;
+            border-radius: 10px;
+            color: white;
+            display: flex;
+            font-size: 20px;
+            font-weight: 700;
+            height: 100%;
+            justify-content: flex-end;
+            padding-right: 20px;
+            box-shadow: inset 0 -3px 0 rgba(0,0,0,0.1);
+        }
+
+        .chart-summary {
+            font-size: 22px;
+            font-weight: 600;
+            background-color: #d1fae5;
+            color: #064e3b;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 40px;
+            text-align: center;
+            width: 100%;
+            border-left: 6px solid #10b981;
+        }
+
+        /* 영역 차트 스타일 */
+        .area-chart-container {
+            padding: 20px 40px;
+            width: 100%;
+        }
+
+        .area-chart-svg {
+            height: auto;
+            overflow: visible;
+            width: 100%;
+        }
+
+        .area-chart-svg .grid {
+            stroke-width: 1.5;
+            stroke: #cbd5e1;
+        }
+
+        .area-chart-svg .area-fill {
+            fill: url(#area-gradient);
+            stroke: none;
+        }
+
+        .area-chart-svg .line-stroke {
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 6;
+            stroke: #10b981;
+        }
+
+        .area-chart-svg .data-point {
+            fill: #ffffff;
+            stroke-width: 4;
+            stroke: #047857;
+        }
+
+        .area-chart-svg .axis-labels {
+            fill: #475569;
+            font-size: 18px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .area-chart-svg .y-axis-labels {
+            text-anchor: end;
+        }
+
+        .area-chart-svg .x-axis-labels {
+            text-anchor: middle;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: 타이틀 슬라이드 -->
+<div class="slide-container" id="slide1">
+    <div class="title-layout">
+        <div style="color: #10b981; font-size: 24px; font-weight: 700; margin-bottom: 20px; letter-spacing: 2px;">(주)리드파트</div>
+        <h1>ESG 및 탄소절감 임팩트 보고서</h1>
+        <p class="subtitle">특허 기반 3-in-1 스마트 육묘 플랫폼의 지속가능성 분석</p>
+    </div>
+</div>
+
+<!-- Slide 2: 핵심 지표 (Highlight Numbers) -->
+<div class="slide-container" id="slide2">
+    <h2 class="slide-title">핵심 환경 성과 지표 (Impact Metrics)</h2>
+    <div class="content-area">
+        <div class="two-column highlight-numbers-layout">
+            <div>
+                <div class="number">6<span style="font-size: 80px;">배</span></div>
+                <div class="number-label">토지 효율성 및 생산성 증대</div>
+            </div>
+            <div style="padding-left: 20px;">
+                <h3 style="color:#0f172a; font-size:38px; margin-bottom:25px; line-height: 1.3;">공간 집약형 설비를 통한<br><span style="color:#10b981;">탄소발자국 최소화</span></h3>
+                <p style="font-size: 22px; line-height:1.8;">기존 1단 평면 위주의 관행 육묘 방식을 탈피하여, 특허 기반의 초밀식 다단 수직농장 시스템(ASRS)을 도입했습니다.</p>
+                <p style="font-size: 22px; line-height:1.8;">이는 동일 면적 대비 생산성을 <strong>6배 이상</strong> 끌어올리며, 불필요한 토지 개발과 그에 따른 직간접적 탄소 배출(Carbon Footprint)을 획기적으로 감축시키는 당사만의 핵심 경쟁력입니다.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 3: 탄소 절감 솔루션 -->
+<div class="slide-container" id="slide3">
+    <h2 class="slide-title">탄소 절감 (Carbon Reduction) 솔루션</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <ul>
+                    <li><strong>토양 폐기물 제로화:</strong> '무토양(Soilless) 모종' 구독 모델을 통해 기존 흙 폐기물 처리 시 발생하는 온실가스 및 메탄 배출을 원천 차단합니다.</li>
+                    <li><strong>수자원 및 비료 최적화:</strong> 정밀한 양액 레시피와 자체 순환 시스템을 통해 농업 용수 낭비를 막고, 하천 수질 오염의 주범인 잉여 비료 배출을 최소화합니다.</li>
+                    <li><strong>질산염 30% 감축 입증:</strong> 식물 생장 환경 최적화를 통해 일반 재배 대비 작물 체내 질산염 수치를 30% 감소시켰습니다.</li>
+                    <li><strong>물류 탄소발자국 단축:</strong> 설비 시공부터 모종 공급, 가공(F&B)에 이르는 지역 거점 밸류체인 통합으로 운송 탄소 배출을 억제합니다.</li>
+                </ul>
+            </div>
+            <div>
+                <!-- 전문적인 시각 자료를 위한 고화질 스마트팜 이미지 -->
+                <div class="image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1589923188900-85dae523342b?auto=format&fit=crop&w=800&q=80" alt="첨단 수직 스마트 팜의 친환경적이고 깨끗한 내부 모습">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 4: 다각적 ESG 실현 가치 -->
+<div class="slide-container" id="slide4">
+    <h2 class="slide-title">다각적 ESG 실현 가치 (ESG Framework)</h2>
+    <div class="content-area">
+        <div class="tiled-content">
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-leaf"></i></div>
+                <h3>환경 (Environment)</h3>
+                <p>토양 오염 원천 차단 및 수자원 보존. 무토양 육묘 보급과 데이터 기반 능동형 제어로 농업 밸류체인 전반의 탄소 배출량 감소와 자원 선순환을 달성합니다.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-users"></i></div>
+                <h3>사회 (Social)</h3>
+                <p>청년농 상생 및 일자리 창출. 배관 막힘 등 초기 폐농 리스크를 해소하여 농가 ROI를 12개월로 단축하며, 여성기업으로서 지역 내 포용적 성장을 주도합니다.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <h3>지배구조 (Governance)</h3>
+                <p>투명한 경영 고도화. 자체 특허(ASRS) 기술과 클라우드 연동 기반의 데이터 파트너십을 구축하여 일회성 판매가 아닌 지속가능한 구독형 수익모델을 확립했습니다.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 5: 관행 농법 비교 (막대 차트) -->
+<div class="slide-container" id="slide5">
+    <h2 class="slide-title">관행 농법 대비 자원 효율 지표 비교</h2>
+    <div class="content-area">
+        <div class="chart-container" style="padding: 0 40px;">
+            <div class="bar">
+                <div class="label">관행 육묘의 토양 폐기물</div>
+                <div class="bar-inner"><div class="bar-fill" style="width: 100%; background: linear-gradient(90deg, #f87171, #ef4444);">100% (기준)</div></div>
+            </div>
+            <div class="bar">
+                <div class="label" style="color: #047857;">리드파트 스마트 육묘 폐기물</div>
+                <div class="bar-inner"><div class="bar-fill" style="width: 5%; background: linear-gradient(90deg, #34d399, #10b981); color: #064e3b; justify-content: center; padding: 0;">5%</div></div>
+            </div>
+            <div class="bar" style="margin-top: 30px;">
+                <div class="label">관행 육묘 단위 면적당 잉여자원</div>
+                <div class="bar-inner"><div class="bar-fill" style="width: 100%; background: linear-gradient(90deg, #fb923c, #f97316);">100% (기준)</div></div>
+            </div>
+            <div class="bar">
+                <div class="label" style="color: #047857;">리드파트 수직농장 자원 소모량</div>
+                <div class="bar-inner"><div class="bar-fill" style="width: 15%; background: linear-gradient(90deg, #2dd4bf, #14b8a6);">15%</div></div>
+            </div>
+        </div>
+        <div style="padding: 0 40px; width: 100%;">
+            <p class="chart-summary">리드파트의 솔루션은 기존 관행 농법 대비 토양 폐기물을 95% 감축하며, 수직 다단식 모듈을 통해 면적당 투입되는 잉여 수자원 및 비료를 85% 이상 절감합니다.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 6: 사회적 임팩트 (Social) -->
+<div class="slide-container" id="slide6">
+    <h2 class="slide-title">핵심 사회적 책임 (Social Impact)</h2>
+    <div class="content-area">
+        <div class="two-column tiled">
+            <div>
+                <h3>청년 창업농 생존율 극대화</h3>
+                <p>정부 정책자금을 지원받는 수많은 청년농들의 가장 큰 실패 원인은 흙 모종 사용으로 인한 '배관 막힘 및 병해충(폐농)' 입니다.</p>
+                <p>당사는 능동형 생리 상태 진단(ASRS) 시스템과 스마트팜에 최적화된 무토양 모종 구독을 제공하여 이러한 막대한 초기 자본 손실 리스크를 원천 차단하고 영농 정착을 돕습니다.</p>
+            </div>
+            <div>
+                <h3>지속가능한 로컬 상생 생태계</h3>
+                <p>통합 솔루션 도입으로 농가의 초기 투자 회수 기간(ROI)을 기존 18개월에서 12개월로 혁신적으로 단축시킵니다.</p>
+                <p>단순 설비 시공에 그치지 않고, 농가에서 생산된 고품질 원물을 당사가 역수매하여 가공식품(F&B)으로 유통하는 선순환 복합 거래 구조를 완성해 지역 경제의 안정적 자립을 지원합니다.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 7: 구독 농가 확산 추이 (영역 차트) -->
+<div class="slide-container" id="slide7">
+    <h2 class="slide-title">친환경 무토양 모종 구독 농가 확산 추이</h2>
+    <div class="content-area">
+        <div class="area-chart-container">
+            <svg class="area-chart-svg" viewBox="0 0 1000 400">
+                <defs>
+                    <linearGradient id="area-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#10b981;" stop-opacity="0.5"></stop>
+                        <stop offset="100%" style="stop-color:#d1fae5;" stop-opacity="0.0"></stop>
+                    </linearGradient>
+                </defs>
+
+                <!-- Grid Lines and Axes -->
+                <g class="grid">
+                    <line x1="0" y1="350" x2="1000" y2="350" stroke="#94a3b8" stroke-width="2"></line>
+                    <line x1="250" y1="0" x2="250" y2="350" stroke-dasharray="5 5"></line>
+                    <line x1="500" y1="0" x2="500" y2="350" stroke-dasharray="5 5"></line>
+                    <line x1="750" y1="0" x2="750" y2="350" stroke-dasharray="5 5"></line>
+                    
+                    <line x1="0" y1="55" x2="1000" y2="55" stroke-dasharray="5 5"></line>
+                    <line x1="0" y1="130" x2="1000" y2="130" stroke-dasharray="5 5"></line>
+                    <line x1="0" y1="205" x2="1000" y2="205" stroke-dasharray="5 5"></line>
+                    <line x1="0" y1="280" x2="1000" y2="280" stroke-dasharray="5 5"></line>
+                </g>
+
+                <!-- Chart Data: Y values -> 350=0, 280=100, 205=200, 130=300, 55=400 -->
+                <!-- Data: 0, 50, 120, 300, 400 -->
+                <path class="area-fill" d="M 0 350 L 250 312 L 500 260 L 750 125 L 1000 50 L 1000 350 L 0 350 Z"></path>
+                <polyline class="line-stroke" points="0,350 250,312 500,260 750,125 1000,50"></polyline>
+
+                <g class="data-points">
+                    <circle class="data-point" cx="0" cy="350" r="8"></circle>
+                    <circle class="data-point" cx="250" cy="312" r="8"></circle>
+                    <circle class="data-point" cx="500" cy="260" r="8"></circle>
+                    <circle class="data-point" cx="750" cy="125" r="8"></circle>
+                    <circle class="data-point" cx="1000" cy="50" r="8"></circle>
+                </g>
+
+                <!-- Axis Labels -->
+                <g class="axis-labels y-axis-labels">
+                    <text x="-20" y="60">400 곳</text>
+                    <text x="-20" y="135">300 곳</text>
+                    <text x="-20" y="210">200 곳</text>
+                    <text x="-20" y="285">100 곳</text>
+                    <text x="-20" y="355">0</text>
+                </g>
+                <g class="axis-labels x-axis-labels">
+                    <text x="0" y="390">2023</text>
+                    <text x="250" y="390">2024</text>
+                    <text x="500" y="390">2025</text>
+                    <text x="750" y="390">2026 (예측)</text>
+                    <text x="1000" y="390">2027 (목표)</text>
+                </g>
+            </svg>
+        </div>
+        <p class="chart-summary" style="margin-top: 15px; text-align: left; background-color: transparent; border: none; padding: 0 20px; font-weight: 500;">
+            <i class="fa-solid fa-circle-info" style="color: #10b981; margin-right: 8px;"></i>
+            2026년 양산 체제 구축을 기점으로 <strong>전국 300여 개 농가</strong>에 당사의 친환경 모종 구독이 확산될 예정입니다. 이는 매년 수천 톤의 토양 폐기물을 대체하는 거대한 환경적 파급력(Impact)을 창출합니다.
+        </p>
+    </div>
+</div>
+
+<!-- Slide 8: 비전 (Full Background Image) -->
+<!-- 자연과 농업의 조화를 보여주는 이미지 사용 -->
+<div class="slide-container full-bg-image" id="slide8" style="background-image: linear-gradient(rgba(15, 23, 42, 0.75), rgba(4, 120, 87, 0.85)), url('https://images.unsplash.com/photo-1628183236315-06c29dfbdce5?auto=format&fit=crop&w=1920&q=80');">
+    <div class="content-overlay">
+        <h2 style="font-size:68px; font-weight:700; margin-bottom:30px; letter-spacing: -1px;">지속가능한 스마트 농업의 미래</h2>
+        <p style="font-size:28px; font-weight:400; max-width:900px; margin: 0 auto; line-height: 1.7; color: #f8fafc;">
+            (주)리드파트는 독보적인 진단 기술과 친환경 비즈니스 모델을 통해<br>
+            <strong>탄소 절감</strong>과 <strong>농가 상생(ESG)</strong>을 최우선 가치로 실현해 나갑니다.
+        </p>
+    </div>
+</div>
+
+</body>
+</html>
+```
