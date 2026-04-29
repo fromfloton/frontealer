@@ -1,299 +1,218 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>키워드 두들링 노트</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Nanum+Pen+Script&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이메일 문장 분류 두들링 노트</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+  
+  <style>
+    /* 배경 모눈종이 패턴 */
+    body {
+      background-color: #fdfbf7;
+      background-image: 
+        linear-gradient(#e1e1e1 1px, transparent 1px), 
+        linear-gradient(90deg, #e1e1e1 1px, transparent 1px);
+      background-size: 24px 24px;
+      font-family: 'Nanum Pen Script', 'Kalam', cursive;
+      color: #2d3748;
+    }
 
-        body {
-            background-color: #fcfcfc;
-            /* 노트 질감 배경 */
-            background-image: 
-                linear-gradient(90deg, transparent 79px, #abced4 79px, #abced4 81px, transparent 81px),
-                linear-gradient(#eee .1em, transparent .1em);
-            background-size: 100% 1.2em;
-            font-family: 'Kalam', 'Nanum Pen Script', cursive, sans-serif;
-            color: #333;
-        }
+    /* 두들링 손그림 느낌 테두리 */
+    .doodle-box {
+      border: 3px solid #334155;
+      border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+      background-color: rgba(255, 255, 255, 0.9);
+      box-shadow: 4px 5px 0px rgba(0,0,0,0.1);
+      transition: all 0.2s ease;
+    }
+    
+    .doodle-box:hover {
+      transform: translateY(-2px);
+      box-shadow: 6px 7px 0px rgba(0,0,0,0.15);
+    }
 
-        /* 두들링 손그림 테두리 효과 */
-        .doodle-border {
-            border: 3px solid #2d3748;
-            border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-            box-shadow: 4px 5px 0px rgba(0,0,0,0.15);
-            transition: all 0.2s ease;
-        }
+    /* 포스트잇 느낌의 문장 카드 */
+    .post-it {
+      border: 2px solid #cbd5e1;
+      border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
+      background-color: #fff;
+      box-shadow: 2px 3px 0px rgba(0,0,0,0.05);
+    }
 
-        .doodle-border:hover {
-            transform: scale(1.02) rotate(-1deg);
-            box-shadow: 6px 8px 0px rgba(0,0,0,0.2);
-        }
+    /* 형광펜 밑줄 효과 */
+    .highlighter {
+      background: linear-gradient(to top, var(--hl-color) 40%, transparent 40%);
+      padding: 0 6px;
+      display: inline-block;
+      line-height: 1.2;
+    }
 
-        .doodle-title {
-            border-radius: 15px 255px 15px 225px/225px 15px 255px 15px;
-        }
+    /* 아코디언 애니메이션 트릭 (Grid 활용) */
+    .accordion-content {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .accordion-content.open {
+      grid-template-rows: 1fr;
+    }
+    .accordion-inner {
+      overflow: hidden;
+    }
 
-        /* 포스트잇 효과 */
-        .post-it {
-            background: #fff9c4; /* 연한 노란색 */
-            border-left: 4px solid #fbc02d;
-            box-shadow: 3px 4px 6px rgba(0,0,0,0.1);
-            border-radius: 2px 10px 10px 2px;
-        }
-        
-        .post-it-unused {
-            background: #f5f5f5;
-            border-left: 4px solid #9e9e9e;
-            box-shadow: 3px 4px 6px rgba(0,0,0,0.05);
-        }
-
-        mark {
-            background-color: rgba(255, 235, 59, 0.6);
-            padding: 0 4px;
-            border-radius: 4px;
-            font-weight: bold;
-            color: #d84315;
-        }
-    </style>
+    /* 아이콘 회전 */
+    .icon-chevron {
+      transition: transform 0.3s ease;
+    }
+    .open .icon-chevron {
+      transform: rotate(180deg);
+    }
+  </style>
 </head>
-<body class="py-10 px-4 md:px-10">
+<body class="min-h-screen p-4 md:p-8 flex justify-center">
 
-    <div class="max-w-6xl mx-auto">
-        
-        <!-- 헤더 영역 -->
-        <header class="text-center mb-12">
-            <h1 class="text-5xl font-bold mb-4 inline-block px-8 py-4 bg-white doodle-border doodle-title text-gray-800">
-                🎨 이메일 키워드 두들링 노트
-            </h1>
-            <p class="text-2xl text-gray-600 mt-4">색상별 공통분모 버블을 터치하여 관련 문장들을 확인해보세요!</p>
-        </header>
-
-        <!-- 공통분모(카테고리) 영역 -->
-        <div id="categories-container" class="flex flex-wrap justify-center gap-8 mb-16">
-            <!-- JS에서 동적 생성됨 -->
-        </div>
-
-        <!-- 결과 문장 표시 영역 -->
-        <div id="result-section" class="hidden mb-16 bg-white/80 p-8 doodle-border !border-dashed !border-gray-400">
-            <h2 id="result-title" class="text-4xl font-bold mb-6 text-gray-800 border-b-2 border-gray-300 pb-2"></h2>
-            <div id="result-list" class="flex flex-col gap-5 text-2xl leading-relaxed tracking-wide">
-                <!-- 결과 문장들이 여기에 나열됨 -->
-            </div>
-        </div>
-
-        <!-- 사용되지 않은 문장 영역 -->
-        <div id="unused-section" class="mt-16 pt-10 border-t-4 border-dotted border-gray-400">
-            <h2 class="text-3xl font-bold mb-6 text-gray-600 flex items-center gap-2">
-                <span>📎</span> 키워드가 포함되지 않은 나머지 문장들
-            </h2>
-            <div id="unused-list" class="flex flex-col gap-4 text-xl text-gray-500">
-                <!-- 미사용 문장들이 여기에 나열됨 -->
-            </div>
-        </div>
-
+  <div class="max-w-4xl w-full">
+    <!-- 노트 타이틀 영역 -->
+    <div class="mb-10 text-center">
+      <h1 class="text-5xl md:text-6xl font-bold mb-4 transform -rotate-1 inline-block" style="--hl-color: #fcd34d;">
+        <span class="highlighter">분류 노트 (Sorting Note)</span>
+      </h1>
+      <p class="text-2xl text-gray-600">이메일 문장 14개 공통분모 분류하기 ✍️</p>
     </div>
 
-    <script>
-        // 원본 텍스트 데이터 (사용자 제공)
-        const rawTextData = `
-        "I am writing to express my sincere gratitude for the professional tour our group attended a few days ago. Your team’s passion and extensive knowledge were truly inspiring; in particular, the documentary regarding the city’s developments at the Grand Kabwe Theater was a highlight for many of us. Additionally, witnessing the actors rehearse provided us with a unique and valuable perspective on the performing arts. On a separate note, I would like to inquire if a mobile phone was turned in to your lost and found department. My friends believe they may have left behind during our visit. Please let me know if a device matching this description has been recovered. Thank you again for such a memorable and educational experience."
-        "I hope this email finds you well. I am writing to inquire about my recent paycheck for the summer holiday period. Upon reviewing the total, the amount appears lower than anticipated based on the hours I completed. Throughout my employment, I remained fully committed to my schedule and consistently fulfilled all assigned duties. To help clarify this discrepancy, could you provide a detailed payroll statement? I would like to ensure my records align with the company’s calculations so I can manage my personal budget accurately.","Thank you for your assistance, and I look forward to your prompt response. "
-        "Thank you for your email regarding my recent three-night stay. Overall I had a wonderful experience. I particularly appreciated the hotel’s convenient proximity to the hiking trails. Additionally, the restaurant exceeded my expectations, especially with its impressive variety of vegan options.","I would like to mention one minor issue, however, The heater system in my room made a persistent loud noise at night, which occasionally disrupted my sleep. I wanted to bring this to your attention so it might be serviced for future guests. Despite this, I was very satisfied with my visit and would certainly choose to stay at the SpringField Hotel again in the future. Thank you for your hospitality "
-        "I am writing to formally request a room transfer for the upcoming term. Currently, I share a room where the environment has become increasingly difficult for academic focus. My roommate frequently hosts guests and parties, which result in significant noise and a lack of privacy. Furthermore, my personal belongings are often borrowed without my permission, creating an uncomfortable living situation. Despite my attempt to resolve these issues directly, the disruptions persist. As I have several demanding assignments next semester, I would like to request a move to a single room. I believe a more private environment is essential for my academic success.","Thank you for your assistance, and I look forward to your response. "
-        "I hope you are doing well. I would love to help you spend the day with your family; however, I am unfortunately unable to cover your shift this Saturday. I have already committed to my important personal plans that I simply cannot reschedule. As an alternative, you might want to reach out to Mike, I heard him mention earlier this week that he was looking for extra hours, so he might be willing to take over your schedule for the day","I am sorry that I cannot be of more help this time, but I hope you have a wonderful visit with your family!"
-        I am writing on behalf of a student group currently conducting a social survey project. We are very interested in visiting your historical exhibition and would appreciate more information to help us finalize our plans.,"Specifically, Could you provide details regarding the main themes and contents of the exhibition? Additionally, I would like to confirm the official opening and closing dates for the event. Lastly, as our group consists of six students, I am inquiring if there are any group or student discounts available for admission.",Thank you for your time and assistance. I look forward to your response so that we may reschedule our visit accordingly 
-        "I hope you are having a productive week. I am writing to clarify the details regarding next Friday’s computer workshop, as I noticed you were unsure about attending. This session is mandatory because it introduces the new cyber security protocols and software updates that our department is implementing next month. To ensure the office remains compliant, the management requires all staff to participate. Please confirm your attendance with the HR department by Wednesday so they can finalize the guest list. To prepare, please ensure your laptop is fully charged and that you have reviewed the preliminary manual attached to the original invitation. ",I look forward to seeing you there 
-        "I hope you are doing well. I am writing to sincerely thank you for all the help you provided since I arrived in the city. Starting my master’s degree has been quite overwhelming, and I was particularly struggling with navigating the local transportation system and managing the initial university paperwork.","Your guidance truly made these challenges manageable, and I am so grateful for the time you took to assist me. Not that I am starting to feel more settled, I would love to meet up for a coffee soon to catch up properly. Thank you for your kindness. I look forward to hearing from you. "
-        "I hope you are doing well. I am writing to thank you for the digital marketing workshop you presented several days ago. I found the session incredibly informative, particularly the section on long-term growth strategies. Your insights into navigating shifting market trends gave me a fresh perspective on how to approach digital outreach effectively. The real-word examples you shared were especially helpful in illustrating complex concepts.","Because I am eager to expand my knowledge in this era, would you be willing to commence any additional resources or specific study methods? I am particularly interested in any advanced readings or online platforms you find valuable.",Thank you for your time and expertise 
-        "I hope you are doing well. I would like to sincerely apologize for not being able to meet you at the airport on time. I unfortunately lost my personal wallet, creating minor issues with getting there on time. I may have left my wallet behind during transportation. I need to check with the lost and found department directly now.","However, I have already reviewed your ticket information attached to our previous email. So I searched for a coffee shop in close proximity to your gate in advance. I would love to meet up at the coffee shop in front of the gate when you come out.","To avoid further issues, I wanted to note my appearance so you can find me easily: I will be wearing a blue jacket and a black cap. Thank you for your patience and time. I look forward to seeing you at the coffee shop. "
-        "I hope you are doing well. I am writing to sincerely apologize for issues regarding the recent delivery of the office cabinets. As I had several demanding packaging duties at that time, it resulted in an issue with the packaging of your items. To resolve this issue directly, I want to schedule a delivery for the missing screw parts as soon as possible. I would like to ensure your items arrive accordingly, so I have arranged express delivery services to avoid further inconvenience to your plans; the tracking number is 677677329 through DHL logistics. I am sincerely sorry again for creating this uncomfortable situation. Thank you for your patience and time. "
-        "I hope you are doing well. I would love to invite you to a party for my father to celebrate his Pulitzer prize. His passion and extensive knowledge of journalism have always been inspiring, and this achievement is a highlight for our family. During the celebration, we have arranged catering with  especially an impressive variety of vegan options available for you .  Additionally we have prepared a special event for all the participants, so please remember to bring your  original invitation;as it contains your secret numbers.  We would be honored to have you join us to witness his achievement I look forward to seeing you at the party "
-        "I hope you are doing well. I am writing to formally inquire about the repair or replacement of the headphones I bought last weekend at your store. During my listening study, I realized that the sound frequently cuts out on one side of the headphones, which disrupts my academic focus, so I would like to request the proper method for addressing this uncomfortable situation. To help with your review directly, I have attached my receipt and a video showing the issue. To prepare, please review these symptoms properly. Specifically, could you provide details regarding how and when I can bring in the headphones for service?  I would also like to confirm the necessary steps to repair or replace the headphones. Thank you for your assistance, and I look forward to your response. "
-        "I hope you are doing well. I am writing to invite you to the musical  ""Oscar Darling"" at the Sabana Civic Center this August. I have put extensive passion and knowledge into this production as a director; in particular, managing several demanding roles this term has been quite overwhelming but truly inspiring. You will even have a chance to see the actors rehearsing, which will provide a unique and valuable perspective on the performance art. Additionally, the live orchestra will exceed your expectations with its impressive variety. Since tickets are in high demand, please secure your seats soon before they sell out! I am so grateful for your support and look forward to seeing you there! "
-        `;
+    <!-- 아코디언 컨테이너가 렌더링될 곳 -->
+    <div id="accordion-container" class="space-y-6">
+      <!-- JS로 생성됨 -->
+    </div>
+  </div>
 
-        // 텍스트 정제 및 문장 단위 분리
-        const cleanedText = rawTextData.replace(/"/g, ' ').replace(/\n|\r/g, ' ').replace(/\s{2,}/g, ' ');
-        // 마침표, 물음표, 느낌표를 기준으로 분리하되 구두점은 남김
-        const sentences = cleanedText.match(/[^.?!]+[.?!]+/g).map(s => s.trim()).filter(s => s.length > 5);
+  <script>
+    // 14개의 문장을 6개의 카테고리로 완벽하게 분류한 데이터
+    const categories = [
+      {
+        id: 'appreciation',
+        title: '💌 감사 & 긍정적 피드백 (Appreciation)',
+        color: '#fef08a', // 노란색 형광펜
+        items: [
+          "I am writing to express my sincere gratitude for the professional tour our group attended a few days ago. Your team’s passion and extensive knowledge were truly inspiring; in particular, the documentary regarding the city’s developments at the Grand Kabwe Theater was a highlight for many of us. Additionally, witnessing the actors rehearse provided us with a unique and valuable perspective on the performing arts. On a separate note, I would like to inquire if a mobile phone was turned in to your lost and found department. My friends believe they may have left behind during our visit. Please let me know if a device matching this description has been recovered. Thank you again for such a memorable and educational experience.",
+          "I hope you are doing well. I am writing to sincerely thank you for all the help you provided since I arrived in the city. Starting my master’s degree has been quite overwhelming, and I was particularly struggling with navigating the local transportation system and managing the initial university paperwork. Your guidance truly made these challenges manageable, and I am so grateful for the time you took to assist me. Not that I am starting to feel more settled, I would love to meet up for a coffee soon to catch up properly. Thank you for your kindness. I look forward to hearing from you.",
+          "I hope you are doing well. I am writing to thank you for the digital marketing workshop you presented several days ago. I found the session incredibly informative, particularly the section on long-term growth strategies. Your insights into navigating shifting market trends gave me a fresh perspective on how to approach digital outreach effectively. The real-word examples you shared were especially helpful in illustrating complex concepts. Because I am eager to expand my knowledge in this era, would you be willing to commence any additional resources or specific study methods? I am particularly interested in any advanced readings or online platforms you find valuable. Thank you for your time and expertise."
+        ]
+      },
+      {
+        id: 'complaint',
+        title: '⚠️ 불만 제기 & 시정/수리 요청 (Complaints)',
+        color: '#fbcfe8', // 분홍색 형광펜
+        items: [
+          "Thank you for your email regarding my recent three-night stay. Overall I had a wonderful experience. I particularly appreciated the hotel’s convenient proximity to the hiking trails. Additionally, the restaurant exceeded my expectations, especially with its impressive variety of vegan options. I would like to mention one minor issue, however, The heater system in my room made a persistent loud noise at night, which occasionally disrupted my sleep. I wanted to bring this to your attention so it might be serviced for future guests. Despite this, I was very satisfied with my visit and would certainly choose to stay at the SpringField Hotel again in the future. Thank you for your hospitality.",
+          "I am writing to formally request a room transfer for the upcoming term. Currently, I share a room where the environment has become increasingly difficult for academic focus. My roommate frequently hosts guests and parties, which result in significant noise and a lack of privacy. Furthermore, my personal belongings are often borrowed without my permission, creating an uncomfortable living situation. Despite my attempt to resolve these issues directly, the disruptions persist. As I have several demanding assignments next semester, I would like to request a move to a single room. I believe a more private environment is essential for my academic success. Thank you for your assistance, and I look forward to your response.",
+          "I hope you are doing well. I am writing to formally inquire about the repair or replacement of the headphones I bought last weekend at your store. During my listening study, I realized that the sound frequently cuts out on one side of the headphones, which disrupts my academic focus, so I would like to request the proper method for addressing this uncomfortable situation. To help with your review directly, I have attached my receipt and a video showing the issue. To prepare, please review these symptoms properly. Specifically, could you provide details regarding how and when I can bring in the headphones for service? I would also like to confirm the necessary steps to repair or replace the headphones. Thank you for your assistance, and I look forward to your response."
+        ]
+      },
+      {
+        id: 'inquiry',
+        title: '❓ 문의 & 정보 요청 (Inquiries)',
+        color: '#bfdbfe', // 파란색 형광펜
+        items: [
+          "I hope this email finds you well. I am writing to inquire about my recent paycheck for the summer holiday period. Upon reviewing the total, the amount appears lower than anticipated based on the hours I completed. Throughout my employment, I remained fully committed to my schedule and consistently fulfilled all assigned duties. To help clarify this discrepancy, could you provide a detailed payroll statement? I would like to ensure my records align with the company’s calculations so I can manage my personal budget accurately. Thank you for your assistance, and I look forward to your prompt response.",
+          "I am writing on behalf of a student group currently conducting a social survey project. We are very interested in visiting your historical exhibition and would appreciate more information to help us finalize our plans. Specifically, Could you provide details regarding the main themes and contents of the exhibition? Additionally, I would like to confirm the official opening and closing dates for the event. Lastly, as our group consists of six students, I am inquiring if there are any group or student discounts available for admission. Thank you for your time and assistance. I look forward to your response so that we may reschedule our visit accordingly."
+        ]
+      },
+      {
+        id: 'apology',
+        title: '🙇 사과 & 문제 해결 (Apologies)',
+        color: '#e9d5ff', // 보라색 형광펜
+        items: [
+          "I hope you are doing well. I would like to sincerely apologize for not being able to meet you at the airport on time. I unfortunately lost my personal wallet, creating minor issues with getting there on time. I may have left my wallet behind during transportation. I need to check with the lost and found department directly now. However, I have already reviewed your ticket information attached to our previous email. So I searched for a coffee shop in close proximity to your gate in advance. I would love to meet up at the coffee shop in front of the gate when you come out. To avoid further issues, I wanted to note my appearance so you can find me easily: I will be wearing a blue jacket and a black cap. Thank you for your patience and time. I look forward to seeing you at the coffee shop.",
+          "I hope you are doing well. I am writing to sincerely apologize for issues regarding the recent delivery of the office cabinets. As I had several demanding packaging duties at that time, it resulted in an issue with the packaging of your items. To resolve this issue directly, I want to schedule a delivery for the missing screw parts as soon as possible. I would like to ensure your items arrive accordingly, so I have arranged express delivery services to avoid further inconvenience to your plans; the tracking number is 677677329 through DHL logistics. I am sincerely sorry again for creating this uncomfortable situation. Thank you for your patience and time."
+        ]
+      },
+      {
+        id: 'invitation',
+        title: '🎉 초대 & 행사 안내 (Invitations & Notices)',
+        color: '#bbf7d0', // 초록색 형광펜
+        items: [
+          "I hope you are having a productive week. I am writing to clarify the details regarding next Friday’s computer workshop, as I noticed you were unsure about attending. This session is mandatory because it introduces the new cyber security protocols and software updates that our department is implementing next month. To ensure the office remains compliant, the management requires all staff to participate. Please confirm your attendance with the HR department by Wednesday so they can finalize the guest list. To prepare, please ensure your laptop is fully charged and that you have reviewed the preliminary manual attached to the original invitation. I look forward to seeing you there.",
+          "I hope you are doing well. I would love to invite you to a party for my father to celebrate his Pulitzer prize. His passion and extensive knowledge of journalism have always been inspiring, and this achievement is a highlight for our family. During the celebration, we have arranged catering with especially an impressive variety of vegan options available for you. Additionally we have prepared a special event for all the participants, so please remember to bring your original invitation; as it contains your secret numbers. We would be honored to have you join us to witness his achievement I look forward to seeing you at the party.",
+          "I hope you are doing well. I am writing to invite you to the musical \"Oscar Darling\" at the Sabana Civic Center this August. I have put extensive passion and knowledge into this production as a director; in particular, managing several demanding roles this term has been quite overwhelming but truly inspiring. You will even have a chance to see the actors rehearsing, which will provide a unique and valuable perspective on the performance art. Additionally, the live orchestra will exceed your expectations with its impressive variety. Since tickets are in high demand, please secure your seats soon before they sell out! I am so grateful for your support and look forward to seeing you there!"
+        ]
+      },
+      {
+        id: 'declination',
+        title: '✋ 정중한 거절 (Declination)',
+        color: '#fed7aa', // 주황색 형광펜
+        items: [
+          "I hope you are doing well. I would love to help you spend the day with your family; however, I am unfortunately unable to cover your shift this Saturday. I have already committed to my important personal plans that I simply cannot reschedule. As an alternative, you might want to reach out to Mike, I heard him mention earlier this week that he was looking for extra hours, so he might be willing to take over your schedule for the day. I am sorry that I cannot be of more help this time, but I hope you have a wonderful visit with your family!"
+        ]
+      }
+    ];
 
-        // 2번 이상 등장한 키워드를 그룹화 (공통분모)
-        const categories = [
-            {
-                id: 'greetings',
-                name: '👋 인사 및 맺음말',
-                color: 'bg-blue-100 border-blue-400 text-blue-900',
-                badgeColor: 'bg-blue-200 text-blue-800 border-blue-300',
-                keywords: [
-                    { label: 'I hope you are doing well', match: ['i hope you are doing well', 'i hope this email finds you well'] },
-                    { label: 'I am writing to', match: ['i am writing to'] },
-                    { label: 'I look forward to', match: ['look forward to'] },
-                    { label: 'Thank you for your assistance/patience', match: ['thank you for your assistance', 'thank you for your patience and time'] }
-                ]
-            },
-            {
-                id: 'positive',
-                name: '✨ 긍정적 경험 및 칭찬',
-                color: 'bg-pink-100 border-pink-400 text-pink-900',
-                badgeColor: 'bg-pink-200 text-pink-800 border-pink-300',
-                keywords: [
-                    { label: 'Passion and knowledge', match: ['passion and extensive knowledge'] },
-                    { label: 'Truly inspiring', match: ['truly inspiring'] },
-                    { label: 'Valuable perspective', match: ['unique and valuable perspective'] },
-                    { label: 'Impressive variety', match: ['impressive variety'] },
-                    { label: 'Exceed expectations', match: ['exceeded my expectations', 'exceed your expectations'] },
-                    { label: 'So grateful for', match: ['so grateful for'] },
-                    { label: 'Actors rehearsing', match: ['actors rehearse', 'actors rehearsing'] }
-                ]
-            },
-            {
-                id: 'problems',
-                name: '🌧️ 문제 상황 및 스트레스',
-                color: 'bg-orange-100 border-orange-400 text-orange-900',
-                badgeColor: 'bg-orange-200 text-orange-800 border-orange-300',
-                keywords: [
-                    { label: 'Uncomfortable situation', match: ['uncomfortable situation', 'uncomfortable living situation'] },
-                    { label: 'Quite overwhelming', match: ['quite overwhelming'] },
-                    { label: 'Demanding', match: ['demanding'] },
-                    { label: 'Lost and found', match: ['lost and found department'] }
-                ]
-            },
-            {
-                id: 'requests',
-                name: '💡 요청 및 세부사항',
-                color: 'bg-green-100 border-green-400 text-green-900',
-                badgeColor: 'bg-green-200 text-green-800 border-green-300',
-                keywords: [
-                    { label: 'Resolve issue directly', match: ['resolve this issue directly', 'resolve these issues directly'] },
-                    { label: 'Provide details regarding', match: ['provide details regarding'] },
-                    { label: 'To prepare, please', match: ['to prepare, please'] },
-                    { label: 'Academic focus', match: ['academic focus'] },
-                    { label: 'Original invitation', match: ['original invitation'] }
-                ]
-            }
-        ];
+    const container = document.getElementById('accordion-container');
 
-        // 전역 상태: 사용된 문장들의 인덱스 저장용 Set
-        const usedSentenceIndices = new Set();
+    // 카테고리별 HTML 렌더링
+    categories.forEach(category => {
+      const groupDiv = document.createElement('div');
+      groupDiv.className = 'doodle-box cursor-pointer';
+      
+      // 개별 문장(아이템)들을 그리는 로직
+      const itemsHtml = category.items.map((item, index) => `
+        <div class="post-it p-5 mb-4 text-xl tracking-wide leading-relaxed text-gray-700 relative">
+          <div class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-lg transform rotate-[-10deg]">${index + 1}</div>
+          ${item}
+        </div>
+      `).join('');
 
-        // 1. 카테고리(공통분모) 버블 렌더링
-        const catContainer = document.getElementById('categories-container');
-        categories.forEach((cat, index) => {
-            const keywordBadges = cat.keywords.map(kw => 
-                `<span class="text-sm px-2 py-1 rounded border shadow-sm ${cat.badgeColor} font-sans">${kw.label}</span>`
-            ).join('');
+      groupDiv.innerHTML = `
+        <div class="header p-5 md:p-6 flex justify-between items-center select-none">
+          <h2 class="text-3xl md:text-4xl" style="--hl-color: ${category.color};">
+            <span class="highlighter px-2 font-bold">${category.title}</span>
+            <span class="ml-2 text-2xl text-gray-500">(${category.items.length})</span>
+          </h2>
+          <div class="icon-chevron w-8 h-8 flex items-center justify-center text-gray-600">
+            <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="accordion-content">
+          <div class="accordion-inner px-5 md:px-8 pb-6 pt-2">
+            ${itemsHtml}
+          </div>
+        </div>
+      `;
 
-            const cardHTML = `
-                <div onclick="showSentences(${index})" class="cursor-pointer doodle-border p-6 w-80 flex flex-col items-center justify-start ${cat.color} hover:bg-white transition-colors duration-300">
-                    <h3 class="text-3xl font-bold mb-4">${cat.name}</h3>
-                    <div class="flex flex-wrap gap-2 justify-center mt-auto">
-                        ${keywordBadges}
-                    </div>
-                </div>
-            `;
-            catContainer.innerHTML += cardHTML;
+      // 클릭 시 아코디언 토글 이벤트 추가
+      const header = groupDiv.querySelector('.header');
+      header.addEventListener('click', () => {
+        const content = groupDiv.querySelector('.accordion-content');
+        
+        // 현재 열려있는지 확인
+        const isOpen = content.classList.contains('open');
+        
+        // 모든 아코디언 닫기 (선택 사항: 하나만 열리게 하려면 주석 해제)
+        /*
+        document.querySelectorAll('.accordion-content').forEach(el => {
+          el.classList.remove('open');
+          el.parentElement.classList.remove('open');
         });
+        */
 
-        // 2. 카테고리 클릭 시 문장 보여주기 로직
-        function showSentences(categoryIndex) {
-            const cat = categories[categoryIndex];
-            const resultSection = document.getElementById('result-section');
-            const resultTitle = document.getElementById('result-title');
-            const resultList = document.getElementById('result-list');
-            
-            resultTitle.innerHTML = `<span class="${cat.color.split(' ')[0]} px-2 py-1 rounded doodle-title">${cat.name}</span> 관련 문장들`;
-            resultList.innerHTML = '';
-            
-            // 해당 카테고리 내에서 중복 출력을 막기 위한 Set
-            const currentCatUsedIndices = new Set();
-            let hasResults = false;
-
-            cat.keywords.forEach(kw => {
-                sentences.forEach((sentence, sIndex) => {
-                    const lowerSentence = sentence.toLowerCase();
-                    // 키워드가 문장에 포함되어 있고, 이번 렌더링에서 아직 출력되지 않은 문장이라면
-                    if (kw.match.some(m => lowerSentence.includes(m))) {
-                        usedSentenceIndices.add(sIndex); // 전체 사용 기록에 추가
-                        
-                        if (!currentCatUsedIndices.has(sIndex)) {
-                            currentCatUsedIndices.add(sIndex);
-                            hasResults = true;
-
-                            // 하이라이팅을 위한 정규식 생성 (해당 문장에 포함된 카테고리 내 모든 매칭 단어 찾기)
-                            let allMatchesInCat = [];
-                            cat.keywords.forEach(k => allMatchesInCat.push(...k.match));
-                            
-                            // 긴 매치어부터 치환해야 부분 매칭 오류를 방지함
-                            allMatchesInCat.sort((a, b) => b.length - a.length);
-                            const highlightRegex = new RegExp(`(${allMatchesInCat.join('|')})`, 'gi');
-                            const highlightedText = sentence.replace(highlightRegex, '<mark>$1</mark>');
-
-                            // 랜덤하게 살짝 기울어진 포스트잇 효과
-                            const rotateClass = Math.random() > 0.5 ? 'rotate-1' : '-rotate-1';
-                            
-                            resultList.innerHTML += `
-                                <div class="post-it p-5 transform ${rotateClass} transition hover:scale-[1.01]">
-                                    ${highlightedText}
-                                </div>
-                            `;
-                        }
-                    }
-                });
-            });
-
-            if(!hasResults) {
-                resultList.innerHTML = `<p class="text-gray-500 italic">해당 키워드가 포함된 문장을 찾지 못했습니다.</p>`;
-            }
-
-            resultSection.classList.remove('hidden');
-            // 부드러운 스크롤 이동
-            resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            
-            // 미사용 문장 목록 업데이트
-            renderUnusedSentences();
+        // 토글 실행
+        if (!isOpen) {
+          content.classList.add('open');
+          groupDiv.classList.add('open');
+        } else {
+          content.classList.remove('open');
+          groupDiv.classList.remove('open');
         }
+      });
 
-        // 3. 미사용 문장 렌더링
-        function renderUnusedSentences() {
-            // 초기 로딩 시 모든 매칭을 한번 검사하여 usedSentenceIndices 를 채움
-            if(usedSentenceIndices.size === 0) {
-                 categories.forEach(cat => {
-                    cat.keywords.forEach(kw => {
-                        sentences.forEach((sentence, sIndex) => {
-                            if (kw.match.some(m => sentence.toLowerCase().includes(m))) {
-                                usedSentenceIndices.add(sIndex);
-                            }
-                        });
-                    });
-                });
-            }
-
-            const unusedList = document.getElementById('unused-list');
-            unusedList.innerHTML = '';
-            let unusedCount = 0;
-
-            sentences.forEach((sentence, index) => {
-                if (!usedSentenceIndices.has(index)) {
-                    unusedCount++;
-                    unusedList.innerHTML += `
-                        <div class="post-it-unused p-4 transform rotate-0">
-                            ${sentence}
-                        </div>
-                    `;
-                }
-            });
-
-            if(unusedCount === 0) {
-                 unusedList.innerHTML = `<p>모든 문장이 키워드 분류에 포함되었습니다!</p>`;
-            }
-        }
-
-        // 페이지 로드 시 미사용 문장 영역 미리 계산하여 렌더링
-        window.onload = renderUnusedSentences;
-
-    </script>
+      container.appendChild(groupDiv);
+    });
+  </script>
 </body>
 </html>
