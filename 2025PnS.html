@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Apple SD Gothic Neo', 'AppleGothic', 'Malgun Gothic', sans-serif;
+    background: #f4f6f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 24px;
+  }
+
+  .wrap {
+    width: 1140px;
+    background: #f4f6f9;
+  }
+
+  /* ── title ── */
+  .title-bar {
+    background: #1e2d5a;
+    color: white;
+    text-align: center;
+    padding: 14px 0 12px;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 16px;
+  }
+
+  /* ── 3-col grid ── */
+  .columns {
+    display: grid;
+    grid-template-columns: 200px 1fr 216px;
+    gap: 14px;
+    align-items: start;
+  }
+
+  /* ── column headers ── */
+  .col-header {
+    border-radius: 8px;
+    padding: 11px 0 9px;
+    text-align: center;
+    color: white;
+    margin-bottom: 10px;
+  }
+  .col-header .label { font-size: 17px; font-weight: 700; }
+  .col-header .sub   { font-size: 11px; opacity: 0.82; margin-top: 3px; }
+  .left-header  { background: #2a6ebb; }
+  .center-header {
+    background: #1e2d5a;
+    padding: 11px 0 8px;
+  }
+  .center-header .label { font-size: 20px; }
+  .center-header .sub   { font-size: 12px; }
+  .right-header { background: #1f7a4a; }
+
+  /* ── company boxes (left / right) ── */
+  .company-box {
+    border-radius: 7px;
+    padding: 9px 11px 8px;
+    margin-bottom: 7px;
+    border: 1px solid #d0dae8;
+    position: relative;
+  }
+  .company-box .name {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #1a2e50;
+    line-height: 1.35;
+  }
+  .company-box .role {
+    font-size: 10px;
+    color: #607080;
+    margin-top: 2px;
+  }
+  .company-box .amt {
+    font-size: 11px;
+    font-weight: 700;
+    text-align: right;
+    margin-top: 4px;
+  }
+  .left-col  .amt { color: #2a6ebb; }
+  .right-col .amt { color: #1f7a4a; }
+
+  /* left col box colors */
+  .lc0 { background: #ddeeff; } .lc1 { background: #d5f5e3; }
+  .lc2 { background: #fef9e7; } .lc3 { background: #fce4ec; }
+  .lc4 { background: #ede7f6; } .lc5 { background: #e0f7fa; }
+  .lc6 { background: #fff8e1; } .lc7 { background: #f3e5f5; }
+  .lc8 { background: #e8f5e9; }
+  .lc9 { background: #fce4ec; }
+
+  /* right col box colors */
+  .rc0 { background: #d5f5e3; } .rc1  { background: #ddeeff; }
+  .rc2 { background: #fef9e7; } .rc3  { background: #fce4ec; }
+  .rc4 { background: #ede7f6; } .rc5  { background: #e0f7fa; }
+  .rc6 { background: #fff8e1; } .rc7  { background: #f3e5f5; }
+  .rc8 { background: #e8f5e9; } .rc9  { background: #e0f2f1; }
+  .rc10 { background: #fbe9e7; }
+
+  /* ── center content ── */
+  .center-col { display: flex; flex-direction: column; gap: 10px; }
+
+  /* A B C D grid */
+  .cat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .cat-box {
+    border-radius: 8px;
+    border: 1px solid #bbb;
+    padding: 12px 14px 11px;
+    position: relative;
+  }
+  .cat-box .badge {
+    display: inline-block;
+    background: #1e2d5a;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 4px;
+    padding: 1px 7px;
+    margin-bottom: 6px;
+  }
+  .cat-box .cat-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1c2951;
+    line-height: 1.4;
+  }
+  .cat-box .cat-sub {
+    font-size: 10.5px;
+    color: #555;
+    margin-top: 4px;
+  }
+  .catA { background: #d6eaf8; }
+  .catB { background: #d5f5e3; }
+  .catC { background: #fef9e7; }
+  .catD { background: #fdedec; }
+
+  /* process boxes */
+  .proc-box {
+    border-radius: 7px;
+    border: 1px solid #ccc;
+    padding: 9px 14px 9px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .proc-box::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 6px;
+    background: #1e2d5a;
+    border-radius: 7px 0 0 7px;
+  }
+  .proc-box .proc-title {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #1c2951;
+    white-space: nowrap;
+    min-width: 90px;
+  }
+  .proc-box .proc-desc {
+    font-size: 10.5px;
+    color: #444;
+    line-height: 1.5;
+  }
+  .procA { background: #ebf5fb; }
+  .procB { background: #e9f7ef; }
+  .procC { background: #fef9e7; }
+  .procD { background: #fdedec; }
+
+  /* arrows between columns */
+  .arrow-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    gap: 0;
+  }
+
+  /* ── bottom bar ── */
+  .bottom-bar {
+    background: #1e2d5a;
+    color: white;
+    text-align: center;
+    padding: 12px 0;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-top: 16px;
+    letter-spacing: 0.3px;
+  }
+  .bottom-bar span {
+    margin: 0 18px;
+    opacity: 0.9;
+  }
+  .bottom-bar .sep {
+    opacity: 0.4;
+    margin: 0 4px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- TITLE -->
+  <div class="title-bar">(주)리드파트 — 거래처별 매입·매출 현황 인포그래픽 (2025년 결산)</div>
+
+  <!-- 3 COLUMNS -->
+  <div style="display:grid; grid-template-columns: 200px 40px 1fr 40px 216px; gap:0; align-items:stretch;">
+
+    <!-- LEFT -->
+    <div class="left-col">
+      <div class="col-header left-header">
+        <div class="label">매입처</div>
+        <div class="sub">총 매입 약 7.44억원</div>
+      </div>
+      <div class="company-box lc0"><div class="name">농업회사법인(주)그린 계열</div><div class="role">농산물 구매</div><div class="amt">1.39억원</div></div>
+      <div class="company-box lc1"><div class="name">㈜기대</div><div class="role">장비·부품 공급</div><div class="amt">1.38억원</div></div>
+      <div class="company-box lc2"><div class="name">㈜다심</div><div class="role">농산물 구매</div><div class="amt">1.28억원</div></div>
+      <div class="company-box lc3"><div class="name">㈜풀립</div><div class="role">장비·모듈 공급</div><div class="amt">1.23억원</div></div>
+      <div class="company-box lc4"><div class="name">(주)온새미팜</div><div class="role">설비·자재 공급</div><div class="amt">5,354만원</div></div>
+      <div class="company-box lc5"><div class="name">주식회사 도도</div><div class="role">농산물 구매</div><div class="amt">5,211만원</div></div>
+      <div class="company-box lc6"><div class="name">(주)청년도시농부</div><div class="role">농산물 구매</div><div class="amt">4,603만원</div></div>
+      <div class="company-box lc7"><div class="name">농업회사법인 상생(주)</div><div class="role">농산물 구매</div><div class="amt">3,798만원</div></div>
+      <div class="company-box lc8"><div class="name">리플랜트</div><div class="role">설비·자재 공급</div><div class="amt">1,506만원</div></div>
+      <div class="company-box lc9"><div class="name">주식회사 푸실</div><div class="role">설비·자재 공급</div><div class="amt">1,250만원</div></div>
+    </div>
+
+    <!-- ARROWS LEFT↔CENTER -->
+    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; padding-top:54px; gap:6px;">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:1px;">
+        <span style="font-size:9px; color:#2a6ebb; font-weight:700;">납품</span>
+        <svg width="38" height="14" viewBox="0 0 38 14">
+          <line x1="2" y1="7" x2="30" y2="7" stroke="#2a6ebb" stroke-width="2.2"/>
+          <polygon points="30,3 38,7 30,11" fill="#2a6ebb"/>
+        </svg>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:1px;">
+        <svg width="38" height="14" viewBox="0 0 38 14">
+          <line x1="8" y1="7" x2="36" y2="7" stroke="#2a6ebb" stroke-width="2.2"/>
+          <polygon points="8,3 0,7 8,11" fill="#2a6ebb"/>
+        </svg>
+        <span style="font-size:9px; color:#2a6ebb; font-weight:700;">발주</span>
+      </div>
+    </div>
+
+    <!-- CENTER -->
+    <div class="center-col">
+      <div class="col-header center-header">
+        <div class="label">(주)리드파트</div>
+        <div class="sub">설계 · 조달 · 시공 · 유통 &nbsp;(Vertical Farm Integrator)</div>
+      </div>
+
+      <!-- A B C D -->
+      <div class="cat-grid">
+        <div class="cat-box catA">
+          <div class="badge">A</div>
+          <div class="cat-title">수직농장·육묘 시스템</div>
+          <div class="cat-sub">AL프로파일 / 육묘 베드 / 레이어 구조</div>
+        </div>
+        <div class="cat-box catB">
+          <div class="badge">B</div>
+          <div class="cat-title">스마트팜 장비·모듈</div>
+          <div class="cat-sub">제어반 / 센서 / 조명 설비 공급</div>
+        </div>
+        <div class="cat-box catC">
+          <div class="badge">C</div>
+          <div class="cat-title">양액제어·공조시스템</div>
+          <div class="cat-sub">EC/pH 자동제어 / 냉난방 공조</div>
+        </div>
+        <div class="cat-box catD">
+          <div class="badge">D</div>
+          <div class="cat-title">배관설치·농산물</div>
+          <div class="cat-sub">배관 시공 / 농산물 조달·유통</div>
+        </div>
+      </div>
+
+      <!-- PROCESS -->
+      <div class="proc-box procA">
+        <div class="proc-title">매입 조달</div>
+        <div class="proc-desc">협력사 소싱 / BOM 관리 / 농산물·장비 구매 / 협력사 관리</div>
+      </div>
+      <div class="proc-box procB">
+        <div class="proc-title">설계·엔지니어링</div>
+        <div class="proc-desc">수직농장 시스템 설계 / 장비 사양 결정 / 도면 발행 / 품질 검수</div>
+      </div>
+      <div class="proc-box procC">
+        <div class="proc-title">설치·시공</div>
+        <div class="proc-desc">현장 배관·공조·전기 시스템 구축 / 시운전 / 사용자 교육</div>
+      </div>
+      <div class="proc-box procD">
+        <div class="proc-title">납품·유통</div>
+        <div class="proc-desc">고객사 직납 / 농산물 유통 / 유지보수 공급 / A/S 관리</div>
+      </div>
+    </div>
+
+    <!-- ARROWS CENTER↔RIGHT -->
+    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; padding-top:54px; gap:6px;">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:1px;">
+        <span style="font-size:9px; color:#1f7a4a; font-weight:700;">납품</span>
+        <svg width="38" height="14" viewBox="0 0 38 14">
+          <line x1="2" y1="7" x2="30" y2="7" stroke="#1f7a4a" stroke-width="2.2"/>
+          <polygon points="30,3 38,7 30,11" fill="#1f7a4a"/>
+        </svg>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:1px;">
+        <svg width="38" height="14" viewBox="0 0 38 14">
+          <line x1="8" y1="7" x2="36" y2="7" stroke="#1f7a4a" stroke-width="2.2"/>
+          <polygon points="8,3 0,7 8,11" fill="#1f7a4a"/>
+        </svg>
+        <span style="font-size:9px; color:#1f7a4a; font-weight:700;">수주</span>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right-col">
+      <div class="col-header right-header">
+        <div class="label">매출처</div>
+        <div class="sub">총 매출 약 8.69억원</div>
+      </div>
+      <div class="company-box rc0"><div class="name">농업회사법인(주)그린 계열</div><div class="role">스마트팜 시스템</div><div class="amt">2.16억원</div></div>
+      <div class="company-box rc1"><div class="name">(주)온새미팜</div><div class="role">육묘·장비 납품</div><div class="amt">1.46억원</div></div>
+      <div class="company-box rc2"><div class="name">㈜다심</div><div class="role">장비·설비 납품</div><div class="amt">9,093만원</div></div>
+      <div class="company-box rc3"><div class="name">(주)그리닝팜</div><div class="role">스마트팜 시스템</div><div class="amt">7,680만원</div></div>
+      <div class="company-box rc4"><div class="name">(주)그린라인팜</div><div class="role">장비·설비 납품</div><div class="amt">7,132만원</div></div>
+      <div class="company-box rc5"><div class="name">그로위즈(주)</div><div class="role">시스템 구축</div><div class="amt">6,823만원</div></div>
+      <div class="company-box rc6"><div class="name">아빠표농장(주)</div><div class="role">장비 납품</div><div class="amt">5,910만원</div></div>
+      <div class="company-box rc7"><div class="name">(주)메종드제이미</div><div class="role">스마트팜 시스템</div><div class="amt">5,354만원</div></div>
+      <div class="company-box rc8"><div class="name">농업회사법인 상생(주)</div><div class="role">농산물 유통</div><div class="amt">4,700만원</div></div>
+      <div class="company-box rc9"><div class="name">면세 현금매출</div><div class="role">농산물 현금판매</div><div class="amt">3,440만원</div></div>
+      <div class="company-box rc10"><div class="name">(주)시스터팜</div><div class="role">설비 납품</div><div class="amt">595만원</div></div>
+    </div>
+
+  </div><!-- /grid -->
+
+  <!-- BOTTOM BAR -->
+  <div class="bottom-bar">
+    <span>총 매입 &nbsp;7.44억원</span>
+    <span class="sep">│</span>
+    <span>총 매출 &nbsp;8.69억원</span>
+    <span class="sep">│</span>
+    <span>추정 마진 &nbsp;1.25억원 &nbsp;(마진율 14.4%)</span>
+  </div>
+
+</div>
+</body>
+</html>
