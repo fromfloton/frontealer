@@ -1,0 +1,6 @@
+{
+  "name": "frontealer",
+  "scripts": {
+    "deploy": "rm -rf dist && mkdir dist && cp -r index.html css js images woff2 data en main.mp4 dist/ && npx wrangler deploy"
+  }
+}
