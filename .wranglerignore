@@ -1,3 +1,7 @@
-.git/
-store/
+.git
+.git/**
+store
+store/**
 *.pdf
+main.mp4
+node_modules
