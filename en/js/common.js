@@ -100,9 +100,11 @@ $(".floating_btn").hide();
 	}
 
 	$(".pcNav>ul>li").mouseover(function(){
+		$("#header").addClass("on");
 	});
 
 	$("#header").mouseleave(function(){
+		$("#header").removeClass("on");
 	});
 	
 	$(".btnMenu").click(function(){
