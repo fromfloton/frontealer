@@ -562,10 +562,12 @@ transform:translateY(-50%);}
 	cursor:pointer;
 }
 .section4 .gallery .btn .inner .gnext{
-	width:10px;height:18px;display: inline-block;
-	background: url(../../images/main/gal_next.png)no-repeat center;
+	width:40px;height:40px;display: inline-flex;align-items:center;justify-content:center;
 	margin-left:2vw;
 	cursor:pointer;
+}
+.section4 .gallery .btn .inner .gnext svg{
+	width:100%;height:100%;
 }
 .section4 .gallery .btn .inner dl{max-width:60%;word-break:break-all;box-sizing:border-box;}
 .section4 .gallery .btn .inner dl dt{
