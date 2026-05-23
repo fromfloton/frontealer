@@ -555,10 +555,13 @@ transform: translate(-50%, 0);
 	background: rgba(0,0,0,0.2);
 }
 .section4 .gallery .btn .inner .gprev{
-	width:10px;height:18px;display: inline-block;
-	background: url(../../images/main/gal_prev.png)no-repeat center;
-	margin-right: 2vw;
+	width:20px;height:37px;display: inline-flex;align-items:center;justify-content:center;
+	background:none;
+	margin-right:2vw;
 	cursor:pointer;
+}
+.section4 .gallery .btn .inner .gprev svg{
+	width:20px;height:37px;
 }
 .section4 .gallery .btn .inner .gnext{
 	width:20px;height:37px;display: inline-flex;align-items:center;justify-content:center;
