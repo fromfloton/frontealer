@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(주)리드파트 - 기업소개서</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f1f5f9; /* bg-slate-100 */
+            margin: 0;
+            padding: 2rem 0;
+            color: #1e293b; /* slate-800 */
+        }
+        
+        /* A4 사이즈 PPT 슬라이드 설정 (가로형 297mm x 210mm 비율) */
+        .a4-slide {
+            aspect-ratio: 297 / 210;
+            width: 100%;
+            max-width: 1122px; /* 96dpi 기준 A4 가로 픽셀 사이즈 */
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            page-break-after: always;
+            position: relative;
+        }
+
+        /* 기업 소개서용 상단/하단 데코레이션 선 */
+        .slide-top-bar {
+            height: 8px;
+            background: linear-gradient(90deg, #047857 0%, #1d4ed8 100%);
+            width: 100%;
+        }
+
+        /* 표/그리드 스타일의 테두리 */
+        .corporate-border {
+            border-top: 2px solid #0f172a;
+            border-bottom: 1px solid #cbd5e1;
+        }
+
+        /* 인쇄(Ctrl+P) 시 A4 사이즈 1장에 1페이지씩 꽉 차게 출력되도록 설정 */
+        @media print {
+            @page {
+                size: A4 landscape; /* A4 가로 방향 */
+                margin: 0;
+            }
+            body {
+                background-color: white;
+                padding: 0;
+                -webkit-print-color-adjust: exact; /* 배경색 인쇄 강제 */
+                print-color-adjust: exact;
+            }
+            .slide-wrapper {
+                padding: 0 !important;
+                gap: 0 !important;
+            }
+            .a4-slide {
+                width: 297mm;
+                height: 210mm;
+                max-width: none;
+                box-shadow: none;
+                margin: 0;
+                border-radius: 0;
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 프레젠테이션 컨테이너 -->
+    <div class="w-full flex flex-col items-center space-y-8 slide-wrapper px-4">
+
+        <!-- ==========================================
+             PAGE 1: 핵심 요약 및 지표 (A4 Slide 1)
+             ========================================== -->
+        <section class="a4-slide">
+            <div class="slide-top-bar"></div>
+            
+            <div class="p-12 md:p-14 flex-grow flex flex-col">
+                <!-- Slide Header -->
+                <div class="border-b-2 border-slate-800 pb-4 mb-8 flex justify-between items-end">
+                    <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
+                        <span class="text-emerald-700 mr-2">1.</span> (주)리드파트 기업 개요 및 핵심 성과
+                    </h1>
+                    <div class="text-sm font-bold text-slate-500 uppercase tracking-widest">Company Overview</div>
+                </div>
+
+                <!-- One-Liner Box (기업 비전/미션 스타일) -->
+                <div class="bg-slate-50 border border-slate-200 p-8 mb-10">
+                    <div class="flex items-start">
+                        <div class="w-2 h-full bg-emerald-600 mr-6 self-stretch"></div>
+                        <div>
+                            <h2 class="text-lg font-bold text-emerald-700 mb-2">Executive Summary</h2>
+                            <p class="text-2xl md:text-3xl font-bold leading-snug text-slate-800">
+                                특허 기반의 3-in-1 스마트 육묘 플랫폼으로 농가의 초기 폐농 리스크를 없애고,<br>
+                                설비 시공부터 원물 가공·유통까지 완벽한 밸류체인을 구축하여<br>
+                                <span class="text-emerald-700 underline decoration-emerald-300 underline-offset-4">1년 만에 2.8배의 압도적 성장을 이룬 Ag-Tech 혁신 기업</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Metrics Grid (표 스타일 레이아웃) -->
+                <div class="mt-auto">
+                    <h3 class="text-xl font-bold mb-4 text-slate-800 flex items-center">
+                        <span class="w-1.5 h-4 bg-blue-700 inline-block mr-2"></span> 핵심 경영 지표 (Key Performance Indicators)
+                    </h3>
+                    
+                    <div class="grid grid-cols-4 corporate-border bg-white">
+                        
+                        <!-- Metric 1 -->
+                        <div class="p-6 border-r border-slate-200">
+                            <div class="text-sm font-bold text-slate-500 mb-3 uppercase tracking-wider">Revenue Growth</div>
+                            <div class="text-lg font-bold text-slate-900 mb-1">매출 퀀텀점프</div>
+                            <div class="text-3xl font-extrabold text-blue-700 mb-3">2.8배 <span class="text-base text-slate-500 font-normal">성장</span></div>
+                            <ul class="text-sm text-slate-600 space-y-1">
+                                <li>• 2024년: 3.03억 원</li>
+                                <li>• 2025년: <span class="font-bold text-slate-900">8.69억 원</span></li>
+                            </ul>
+                        </div>
+
+                        <!-- Metric 2 -->
+                        <div class="p-6 border-r border-slate-200">
+                            <div class="text-sm font-bold text-slate-500 mb-3 uppercase tracking-wider">Production Eff.</div>
+                            <div class="text-lg font-bold text-slate-900 mb-1">초격차 생산 효율</div>
+                            <div class="text-3xl font-extrabold text-emerald-600 mb-3">6배 <span class="text-base text-slate-500 font-normal">증대</span></div>
+                            <ul class="text-sm text-slate-600 space-y-1">
+                                <li>• 관행 대비 생산량 대폭 증대</li>
+                                <li>• 질산염 <span class="font-bold text-emerald-700">30% 감소</span> 입증</li>
+                            </ul>
+                        </div>
+
+                        <!-- Metric 3 -->
+                        <div class="p-6 border-r border-slate-200">
+                            <div class="text-sm font-bold text-slate-500 mb-3 uppercase tracking-wider">Customer ROI</div>
+                            <div class="text-lg font-bold text-slate-900 mb-1">고객 투자 회수</div>
+                            <div class="text-3xl font-extrabold text-orange-600 mb-3">-6개월 <span class="text-base text-slate-500 font-normal">단축</span></div>
+                            <ul class="text-sm text-slate-600 space-y-1">
+                                <li>• 기존 18개월 → <span class="font-bold text-slate-900">12개월</span></li>
+                                <li>• 배관 막힘 등 실패 원천 차단</li>
+                            </ul>
+                        </div>
+
+                        <!-- Metric 4 -->
+                        <div class="p-6">
+                            <div class="text-sm font-bold text-slate-500 mb-3 uppercase tracking-wider">B2B Contract</div>
+                            <div class="text-lg font-bold text-slate-900 mb-1">대형 단일 수주</div>
+                            <div class="text-3xl font-extrabold text-purple-700 mb-3">1.39억<span class="text-base text-slate-500 font-normal">원</span></div>
+                            <ul class="text-sm text-slate-600 space-y-1">
+                                <li>• (주)그린 대상 수직농장</li>
+                                <li>• <span class="font-bold text-slate-900">대규모 턴키 시공</span> 확보</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="border-t border-slate-300 mt-0"></div> <!-- 표 하단 마감선 -->
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <div class="px-12 py-4 bg-white text-right text-xs text-slate-400 border-t border-slate-100">
+                (주)리드파트 | CONFIDENTIAL
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PAGE 2: 사업모델 & 수익성 (A4 Slide 2)
+             ========================================== -->
+        <section class="a4-slide">
+            <div class="slide-top-bar"></div>
+            
+            <div class="p-12 md:p-14 flex-grow flex flex-col">
+                <!-- Slide Header -->
+                <div class="border-b-2 border-slate-800 pb-4 mb-8 flex justify-between items-end">
+                    <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
+                        <span class="text-emerald-700 mr-2">2.</span> 비즈니스 모델 및 수익성 분석
+                    </h1>
+                    <div class="text-sm font-bold text-slate-500 uppercase tracking-widest">Business Model & Margin</div>
+                </div>
+
+                <!-- Value Chain Flow (프로세스 다이어그램 스타일) -->
+                <div class="mb-10">
+                    <h3 class="text-lg font-bold mb-4 text-slate-800 flex items-center">
+                        <span class="w-1.5 h-4 bg-emerald-600 inline-block mr-2"></span> 선순환 복합 거래 구조 (Value Chain)
+                    </h3>
+                    
+                    <div class="flex flex-row justify-between items-stretch gap-4 relative">
+                        <!-- 프로세스 연결선 -->
+                        <div class="absolute top-1/2 left-0 w-full h-0.5 bg-slate-300 -z-10 transform -translate-y-1/2"></div>
+
+                        <!-- Step 1 -->
+                        <div class="flex-1 bg-white border border-slate-300 p-6 flex flex-col z-10 shadow-sm relative">
+                            <div class="absolute -top-3 left-6 bg-slate-800 text-white text-xs font-bold px-3 py-1 uppercase tracking-wider">Phase 01</div>
+                            <h4 class="text-xl font-bold text-slate-900 mt-3 mb-2 border-b border-slate-100 pb-2">뼈대 세우기</h4>
+                            <div class="text-sm font-bold text-blue-700 mb-4 bg-blue-50 py-1 px-2 inline-block w-max">설비 턴키 시공 (H/W)</div>
+                            <ul class="text-sm text-slate-600 space-y-2 flex-grow">
+                                <li>• 최정예 부품 소싱 및 고부가 모듈화</li>
+                                <li>• 초기 대형 현금 확보 ((주)그린 등)</li>
+                                <li>• 입소문을 통한 꼬리물기 연쇄 수주</li>
+                            </ul>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="flex-1 bg-white border border-slate-300 p-6 flex flex-col z-10 shadow-sm relative">
+                            <div class="absolute -top-3 left-6 bg-slate-800 text-white text-xs font-bold px-3 py-1 uppercase tracking-wider">Phase 02</div>
+                            <h4 class="text-xl font-bold text-slate-900 mt-3 mb-2 border-b border-slate-100 pb-2">록인 & 구독</h4>
+                            <div class="text-sm font-bold text-emerald-700 mb-4 bg-emerald-50 py-1 px-2 inline-block w-max">3-in-1 스마트 육묘 구독</div>
+                            <ul class="text-sm text-slate-600 space-y-2 flex-grow">
+                                <li>• 특허 기술(ASRS) 탑재 모듈 설치</li>
+                                <li>• 무토양 모종 30일 주기 정기 배송</li>
+                                <li>• 시스템 종속(Lock-in) 고객 이탈 방지</li>
+                            </ul>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="flex-1 bg-white border border-slate-300 p-6 flex flex-col z-10 shadow-sm relative">
+                            <div class="absolute -top-3 left-6 bg-slate-800 text-white text-xs font-bold px-3 py-1 uppercase tracking-wider">Phase 03</div>
+                            <h4 class="text-xl font-bold text-slate-900 mt-3 mb-2 border-b border-slate-100 pb-2">캐시카우 완성</h4>
+                            <div class="text-sm font-bold text-orange-700 mb-4 bg-orange-50 py-1 px-2 inline-block w-max">교차/복합 유통 및 가공</div>
+                            <ul class="text-sm text-slate-600 space-y-2 flex-grow">
+                                <li>• 설치 농가의 재배 작물 역수매/유통</li>
+                                <li>• 고부가가치 완제품 직접 가공 (소스 등)</li>
+                                <li>• F&B 기업 납품을 통한 마진 극대화</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Margin Predictions (보고서형 테이블 레이아웃) -->
+                <div class="mt-auto">
+                    <h3 class="text-lg font-bold mb-4 text-slate-800 flex items-center">
+                        <span class="w-1.5 h-4 bg-blue-700 inline-block mr-2"></span> 부문별 수익성 예측 및 전사 목표 (Margin Forecast)
+                    </h3>
+                    
+                    <div class="flex gap-8">
+                        <!-- Left: Breakdown -->
+                        <div class="w-2/3">
+                            <table class="w-full text-sm text-left">
+                                <thead class="border-t-2 border-b border-slate-800 bg-slate-50">
+                                    <tr>
+                                        <th class="py-3 px-4 font-bold text-slate-900">사업 부문</th>
+                                        <th class="py-3 px-4 font-bold text-slate-900">예측 마진율</th>
+                                        <th class="py-3 px-4 font-bold text-slate-900">수익성 확보 근거</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="py-3 px-4 font-bold text-slate-800">S/W 및 모종 구독</td>
+                                        <td class="py-3 px-4 font-bold text-emerald-600">50% 이상</td>
+                                        <td class="py-3 px-4 text-slate-600">인프라 구축 후 발생하는 반복 매출로 원가가 낮아 이익 극대화 기여</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="py-3 px-4 font-bold text-slate-800">가공 및 제조 (F&B)</td>
+                                        <td class="py-3 px-4 font-bold text-orange-600">40% 이상</td>
+                                        <td class="py-3 px-4 text-slate-600">원물(바질)을 가공식품(소스)으로 납품하여 부가가치 대폭 상승</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="py-3 px-4 font-bold text-slate-800">하드웨어 및 시공</td>
+                                        <td class="py-3 px-4 font-bold text-blue-600">20% ~ 30%</td>
+                                        <td class="py-3 px-4 text-slate-600">단순 유통이 아닌 시스템 통합(Integration) 역량 기반 턴키 납품</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-800">
+                                        <td class="py-3 px-4 font-bold text-slate-800">원물 교차 유통</td>
+                                        <td class="py-3 px-4 font-bold text-yellow-700">5% ~ 10%</td>
+                                        <td class="py-3 px-4 text-slate-600">마진은 낮으나 매입처를 대형 매출처로 전환시키는 네트워크 확보 무기</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Right: Overall Target -->
+                        <div class="w-1/3 bg-slate-800 text-white p-6 flex flex-col justify-center border-t-4 border-emerald-500">
+                            <div class="text-sm text-slate-300 font-bold uppercase tracking-wider mb-2">Target Operating Margin</div>
+                            <h4 class="text-lg font-bold mb-4">전사 평균 영업이익률 목표</h4>
+                            <div class="text-4xl font-extrabold text-emerald-400 mb-6">25% ~ 30%</div>
+                            <ul class="text-xs text-slate-300 space-y-2 opacity-90">
+                                <li>• 시공(H/W)으로 <b>매출 볼륨 확대</b></li>
+                                <li>• 가공/구독으로 <b>안정적 마진 방어</b></li>
+                                <li>• 양산 금형 도입 시 <b>제조 원가 15% 절감</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <div class="px-12 py-4 bg-white text-right text-xs text-slate-400 border-t border-slate-100">
+                (주)리드파트 | CONFIDENTIAL
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>

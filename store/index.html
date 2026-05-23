@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>육묘 생리 상태 진단 3D 시뮬레이터</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .btn-interact {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-interact:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .btn-interact:active {
+            transform: translateY(0);
+        }
+
+        .data-flow-line {
+            width: 2px;
+            background: #e2e8f0;
+            position: relative;
+            margin-left: 15px;
+        }
+        .data-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            position: absolute;
+            left: -4px;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        .dot-active {
+            background: #10b981;
+            box-shadow: 0 0 10px #10b981;
+        }
+        
+        .progress-bar-fill {
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+    <!-- Import Three.js as an ES module -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <!-- 3D Canvas -->
+    <div id="canvas-container"></div>
+
+    <!-- UI Overlay -->
+    <div class="absolute inset-0 z-10 pointer-events-none flex p-6 gap-6 h-screen">
+        
+        <!-- Left Panel: Controls & Info -->
+        <div class="w-1/3 flex flex-col gap-6 pointer-events-auto h-full overflow-y-auto pb-6">
+            <!-- Header -->
+            <div class="glass-panel rounded-2xl p-6">
+                <div class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold mb-3">
+                    <i class="ph ph-leaf mr-1"></i> 특허 기술 시뮬레이터
+                </div>
+                <h1 class="text-2xl font-bold text-slate-800 leading-tight mb-2">다중 자극 반응 속도 분석 육묘 생리 상태 진단 시스템</h1>
+                <p class="text-sm text-slate-500 leading-relaxed">
+                    광, 수분, 물리적 미세 자극을 육묘 잎에 인가하고, 시계열 반응(ASRS)을 분석하여 체내 질산염 수준 및 이식 적정 시점을 AI로 예측합니다.
+                </p>
+            </div>
+
+            <!-- Interaction Controls -->
+            <div class="glass-panel rounded-2xl p-6">
+                <h2 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
+                    <i class="ph ph-cpu text-blue-500 mr-2 text-xl"></i> 자극 생성 및 측정 (100)
+                </h2>
+                <div class="flex flex-col gap-3">
+                    <button id="btn-light" class="btn-interact w-full bg-white border border-slate-200 rounded-xl p-4 flex items-center text-left hover:border-yellow-400 group">
+                        <div class="w-12 h-12 rounded-full bg-yellow-50 text-yellow-500 flex items-center justify-center text-2xl mr-4 group-hover:bg-yellow-100">
+                            <i class="ph ph-sun-dim"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-slate-700">광 자극 (Light)</div>
+                            <div class="text-xs text-slate-500">순간 펄스광 조사 (PRI 회복 측정)</div>
+                        </div>
+                    </button>
+
+                    <button id="btn-water" class="btn-interact w-full bg-white border border-slate-200 rounded-xl p-4 flex items-center text-left hover:border-blue-400 group">
+                        <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center text-2xl mr-4 group-hover:bg-blue-100">
+                            <i class="ph ph-drop"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-slate-700">수분 자극 (Moisture)</div>
+                            <div class="text-xs text-slate-500">미세 수분 분사 (편광/열 반응 측정)</div>
+                        </div>
+                    </button>
+
+                    <button id="btn-physics" class="btn-interact w-full bg-white border border-slate-200 rounded-xl p-4 flex items-center text-left hover:border-purple-400 group">
+                        <div class="w-12 h-12 rounded-full bg-purple-50 text-purple-500 flex items-center justify-center text-2xl mr-4 group-hover:bg-purple-100">
+                            <i class="ph ph-waves"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-slate-700">물리 자극 (Physical)</div>
+                            <div class="text-xs text-slate-500">미세 진동 발생 (움직임 감쇠 측정)</div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="glass-panel rounded-2xl p-6 mt-auto">
+                 <div class="text-xs text-slate-400 text-center">
+                    화면을 드래그하여 3D 시점을 변경할 수 있습니다.<br>
+                    마우스 휠로 확대/축소가 가능합니다.
+                 </div>
+            </div>
+        </div>
+
+        <!-- Spacer -->
+        <div class="w-1/3"></div>
+
+        <!-- Right Panel: Analysis & Prediction Pipeline -->
+        <div class="w-1/3 flex flex-col pointer-events-auto h-full overflow-y-auto pb-6">
+            <div class="glass-panel rounded-2xl p-6 h-full flex flex-col">
+                <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center border-b border-slate-100 pb-4">
+                    <i class="ph ph-chart-line-up text-emerald-500 mr-2 text-2xl"></i> 실시간 상태 분석 파이프라인
+                </h2>
+
+                <div class="flex-1 flex flex-col relative pl-4 pb-4">
+                    <!-- Line connecting nodes -->
+                    <div class="absolute left-6 top-4 bottom-10 w-0.5 bg-slate-200"></div>
+
+                    <!-- Step 1: Analysis -->
+                    <div class="relative pl-10 pb-8">
+                        <div id="dot-200" class="w-5 h-5 rounded-full bg-slate-200 absolute left-[-9px] top-1 transition-colors duration-500 border-4 border-white shadow-sm"></div>
+                        <h3 class="font-bold text-slate-700 text-sm mb-1">분석 모듈 (200)</h3>
+                        <p class="text-xs text-slate-500 mb-3">능동 자극-반응 속도(ASRS) 산출</p>
+                        
+                        <div class="bg-slate-50 rounded-lg p-3 border border-slate-100">
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-600" id="stat-label">대기 중...</span>
+                                <span class="font-mono text-emerald-600 font-bold" id="stat-val">0.00 /s</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-1.5 mb-1 overflow-hidden">
+                                <div id="stat-bar" class="bg-emerald-500 h-1.5 rounded-full progress-bar-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Prediction -->
+                    <div class="relative pl-10 pb-8">
+                        <div id="dot-300" class="w-5 h-5 rounded-full bg-slate-200 absolute left-[-9px] top-1 transition-colors duration-500 border-4 border-white shadow-sm"></div>
+                        <h3 class="font-bold text-slate-700 text-sm mb-1">통합 예측 모듈 (300)</h3>
+                        <p class="text-xs text-slate-500 mb-3">ML 기반 특징 벡터 정규화 및 상태 예측</p>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="bg-slate-50 rounded-lg p-3 border border-slate-100 flex flex-col items-center justify-center">
+                                <div class="text-xs text-slate-500 mb-1">체내 질산염 수준</div>
+                                <div id="pred-nitrate" class="text-lg font-bold text-slate-300 font-mono">-- ppm</div>
+                            </div>
+                            <div class="bg-slate-50 rounded-lg p-3 border border-slate-100 flex flex-col items-center justify-center">
+                                <div class="text-xs text-slate-500 mb-1">이식 적정률</div>
+                                <div id="pred-transplant" class="text-lg font-bold text-slate-300 font-mono">-- %</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Control -->
+                    <div class="relative pl-10">
+                        <div id="dot-400" class="w-5 h-5 rounded-full bg-slate-200 absolute left-[-9px] top-1 transition-colors duration-500 border-4 border-white shadow-sm"></div>
+                        <h3 class="font-bold text-slate-700 text-sm mb-1">신뢰도 기반 안전 제어 모듈 (400)</h3>
+                        <p class="text-xs text-slate-500 mb-3">임계값 초과 시 생육 환경 자동 제어</p>
+                        
+                        <div class="bg-slate-800 rounded-lg p-4 text-white shadow-inner relative overflow-hidden">
+                            <div class="flex items-center justify-between mb-2 z-10 relative">
+                                <span class="text-xs text-slate-300">시스템 신뢰도 점수</span>
+                                <span id="score-val" class="font-mono text-emerald-400 font-bold">-- / 100</span>
+                            </div>
+                            <div id="control-msg" class="text-sm font-medium text-slate-400 z-10 relative flex items-center">
+                                <i class="ph ph-shield-warning mr-2 text-lg"></i> 대기 상태
+                            </div>
+                            
+                            <!-- Control overlay effect -->
+                            <div id="control-overlay" class="absolute inset-0 bg-emerald-500 opacity-0 transition-opacity duration-1000"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // --- 1. Three.js Scene Setup ---
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color('#f8fafc'); // Match Tailwind slate-50
+        scene.fog = new THREE.FogExp2('#f8fafc', 0.02);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(8, 6, 10);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.minDistance = 3;
+        controls.maxDistance = 20;
+        controls.target.set(0, 2, 0);
+
+        // --- 2. Lighting ---
+        const hemiLight = new THREE.HemisphereLight(0xffffff, 0xe2e8f0, 0.6);
+        hemiLight.position.set(0, 10, 0);
+        scene.add(hemiLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+        dirLight.position.set(5, 10, 5);
+        dirLight.castShadow = true;
+        dirLight.shadow.camera.top = 10;
+        dirLight.shadow.camera.bottom = -10;
+        dirLight.shadow.camera.left = -10;
+        dirLight.shadow.camera.right = 10;
+        dirLight.shadow.bias = -0.001;
+        dirLight.shadow.mapSize.width = 2048;
+        dirLight.shadow.mapSize.height = 2048;
+        scene.add(dirLight);
+
+        const fillLight = new THREE.DirectionalLight(0x90b0d0, 0.4);
+        fillLight.position.set(-5, 5, -5);
+        scene.add(fillLight);
+
+        // --- 3. Construct 3D Models based on Patent Drawings ---
+        const groupSetup = new THREE.Group();
+        scene.add(groupSetup);
+
+        // Materials
+        const matPlastic = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.2, metalness: 0.1 });
+        const matMetal = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.4, metalness: 0.8 });
+        const matRail = new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.6, metalness: 0.5 });
+        const matPlantStem = new THREE.MeshStandardMaterial({ color: 0x65a30d, roughness: 0.8 });
+        const matPlantLeaf = new THREE.MeshStandardMaterial({ color: 0x84cc16, roughness: 0.7, side: THREE.DoubleSide });
+        const matPot = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.9 });
+        const matSoil = new THREE.MeshStandardMaterial({ color: 0x451a03, roughness: 1.0 });
+        
+        // 3.1 Environment / Table
+        const tableGeo = new THREE.CylinderGeometry(15, 15, 0.5, 64);
+        const table = new THREE.Mesh(tableGeo, new THREE.MeshStandardMaterial({ color: 0xf1f5f9 }));
+        table.position.y = -0.25;
+        table.receiveShadow = true;
+        groupSetup.add(table);
+
+        const gridHelper = new THREE.GridHelper(30, 30, 0xe2e8f0, 0xe2e8f0);
+        gridHelper.position.y = 0.01;
+        groupSetup.add(gridHelper);
+
+        // 3.2 Seedling (육묘)
+        const plantGroup = new THREE.Group();
+        
+        // Pot
+        const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.6, 1.2, 32), matPot);
+        pot.position.y = 0.6;
+        pot.castShadow = true;
+        pot.receiveShadow = true;
+        plantGroup.add(pot);
+        
+        // Soil
+        const soil = new THREE.Mesh(new THREE.CylinderGeometry(0.75, 0.75, 0.1, 32), matSoil);
+        soil.position.y = 1.15;
+        plantGroup.add(soil);
+
+        // Stem
+        const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 2.5), matPlantStem);
+        stem.position.y = 2.4;
+        stem.castShadow = true;
+        plantGroup.add(stem);
+
+        // Leaves (Simplified geometry)
+        const createLeaf = (y, rotY, angleZ, scale) => {
+            const leafGroup = new THREE.Group();
+            leafGroup.position.set(0, y, 0);
+            leafGroup.rotation.y = rotY;
+            leafGroup.rotation.z = angleZ;
+
+            const leafGeo = new THREE.SphereGeometry(0.5, 16, 16);
+            leafGeo.scale(1, 0.1, 2.5); // Flatten and elongate
+            leafGeo.translate(0, 0, 1.2); // Offset origin to stem
+
+            const leaf = new THREE.Mesh(leafGeo, matPlantLeaf);
+            leaf.castShadow = true;
+            leaf.receiveShadow = true;
+            leaf.scale.setScalar(scale);
+            leafGroup.add(leaf);
+            return leafGroup;
+        };
+
+        plantGroup.add(createLeaf(1.5, 0, 0.5, 0.8));
+        plantGroup.add(createLeaf(2.0, Math.PI * 0.6, 0.4, 0.9));
+        plantGroup.add(createLeaf(2.5, Math.PI * -0.4, 0.3, 1.1));
+        plantGroup.add(createLeaf(3.2, Math.PI, 0.2, 0.7)); // Top sprout
+        
+        groupSetup.add(plantGroup);
+
+        // 3.3 Apparatus (100) - 도 2 기준 모델링
+        const apparatusGroup = new THREE.Group();
+        
+        // 이동 레일부 (110)
+        const rail1 = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.2, 10), matRail);
+        rail1.position.set(-2, 7, 0);
+        rail1.castShadow = true;
+        const rail2 = rail1.clone();
+        rail2.position.set(2, 7, 0);
+        apparatusGroup.add(rail1, rail2);
+
+        // 슬라이딩 몸체부 (120) & 제1 슬라이더 (121)
+        const sliderH = new THREE.Mesh(new THREE.BoxGeometry(4.4, 0.3, 0.5), matMetal);
+        sliderH.position.set(0, 6.9, 0);
+        sliderH.castShadow = true;
+        apparatusGroup.add(sliderH);
+
+        // 제2 슬라이더 (122)
+        const sliderCenter = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.4, 0.8), matPlastic);
+        sliderCenter.position.set(0, 7.1, 0);
+        sliderCenter.castShadow = true;
+        apparatusGroup.add(sliderCenter);
+
+        // 다기능 거치대 (123) - Telescopic arm
+        const armOuter = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 1.5), matPlastic);
+        armOuter.position.set(0, 6.15, 0);
+        armOuter.castShadow = true;
+        apparatusGroup.add(armOuter);
+
+        const armInner = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 2.0), matMetal);
+        armInner.position.set(0, 5.0, 0);
+        armInner.castShadow = true;
+        apparatusGroup.add(armInner);
+
+        // 설치 바디 / 헤드 (124)
+        const head = new THREE.Group();
+        head.position.set(0, 4.0, 0); // initial hover position
+        
+        const headBase = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.5, 1.5), matPlastic);
+        headBase.castShadow = true;
+        head.add(headBase);
+
+        // --- 헤드에 부착된 센서/자극기 ---
+        
+        // 카메라 (160) - Bottom
+        const cameraLens = new THREE.Mesh(new THREE.SphereGeometry(0.4, 32, 32, 0, Math.PI*2, 0, Math.PI/2), new THREE.MeshStandardMaterial({color: 0x111111, roughness: 0.1, metalness: 0.9}));
+        cameraLens.position.y = -0.75;
+        cameraLens.rotation.x = Math.PI;
+        head.add(cameraLens);
+
+        // 광 조사부 (130) - Front
+        const lightModule = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.2, 32), new THREE.MeshStandardMaterial({color: 0x475569}));
+        lightModule.rotation.x = Math.PI / 2;
+        lightModule.position.z = 0.75;
+        const lightLens = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.22, 32), new THREE.MeshBasicMaterial({color: 0xfffbeb}));
+        lightLens.rotation.x = Math.PI / 2;
+        lightLens.position.z = 0.75;
+        head.add(lightModule, lightLens);
+
+        // 미세 수분 분사 노즐부 (140) - Right
+        // (도 3~7의 세부 구조를 외형으로 단순화)
+        const nozzleGroup = new THREE.Group();
+        nozzleGroup.rotation.z = -Math.PI / 2;
+        nozzleGroup.position.x = 0.85;
+        
+        const nozzleBase = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.3, 32), matMetal);
+        const nozzleTip = new THREE.Mesh(new THREE.ConeGeometry(0.3, 0.5, 32), matMetal);
+        nozzleTip.position.y = 0.4;
+        nozzleGroup.add(nozzleBase, nozzleTip);
+        head.add(nozzleGroup);
+
+        // 미세 진동자부 (150) - Left
+        const vibrator = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.8, 0.3), matMetal);
+        vibrator.position.x = -0.85;
+        vibrator.rotation.z = Math.PI / 2;
+        head.add(vibrator);
+
+        apparatusGroup.add(head);
+        groupSetup.add(apparatusGroup);
+
+
+        // --- 4. Special Effects (Particles, Lights) ---
+
+        // 4.1 Light Beam (광 자극 효과)
+        const beamGeo = new THREE.ConeGeometry(1.5, 4, 32, 1, true);
+        beamGeo.translate(0, -2, 0); // Origin at top
+        const beamMat = new THREE.MeshBasicMaterial({
+            color: 0xfde047,
+            transparent: true,
+            opacity: 0,
+            side: THREE.DoubleSide,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false
+        });
+        const lightBeam = new THREE.Mesh(beamGeo, beamMat);
+        lightBeam.position.set(0, 0.75, 0); // Relative to head front
+        lightBeam.rotation.x = Math.PI / 2;
+        lightModule.add(lightBeam);
+
+        // 4.2 Water Particles (수분 자극 효과)
+        const particleCount = 200;
+        const particleGeo = new THREE.BufferGeometry();
+        const pPos = new Float32Array(particleCount * 3);
+        const pVel = [];
+        
+        for(let i=0; i<particleCount; i++) {
+            pPos[i*3] = (Math.random() - 0.5) * 0.2;
+            pPos[i*3+1] = 0;
+            pPos[i*3+2] = (Math.random() - 0.5) * 0.2;
+            pVel.push({
+                y: -Math.random() * 0.05 - 0.05,
+                x: (Math.random() - 0.5) * 0.02,
+                z: (Math.random() - 0.5) * 0.02
+            });
+        }
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+        const particleMat = new THREE.PointsMaterial({
+            color: 0x38bdf8,
+            size: 0.1,
+            transparent: true,
+            opacity: 0,
+            blending: THREE.AdditiveBlending
+        });
+        const waterParticles = new THREE.Points(particleGeo, particleMat);
+        // Position relative to nozzle tip
+        waterParticles.position.y = 0.65;
+        nozzleGroup.add(waterParticles);
+
+        // --- 5. Animation Logic & State ---
+        let currentAction = 'idle'; // 'idle', 'light', 'water', 'physics'
+        let actionTimer = 0;
+        const clock = new THREE.Clock();
+
+        function render() {
+            requestAnimationFrame(render);
+            const delta = clock.getDelta();
+            const time = clock.getElapsedTime();
+
+            controls.update();
+
+            // Default head hovering
+            let targetHeadY = 4.0;
+            let targetHeadX = 0;
+
+            if (currentAction === 'light') {
+                // 광 자극: 노란색 빔 페이드인/아웃, 헤드가 식물 위로 이동 및 회전
+                targetHeadY = 4.5;
+                head.rotation.x = THREE.MathUtils.lerp(head.rotation.x, -Math.PI/4, 0.1); // 기울임
+                lightBeam.material.opacity = Math.sin(time * 8) * 0.3 + 0.3; // 펄스 효과
+                
+            } else if (currentAction === 'water') {
+                // 수분 자극: 노즐이 아래를 향하도록 헤드 회전, 파티클 떨어짐
+                targetHeadY = 4.5;
+                head.rotation.z = THREE.MathUtils.lerp(head.rotation.z, Math.PI/4, 0.1); // 노즐쪽으로 기울임
+                waterParticles.material.opacity = 0.8;
+                
+                const positions = waterParticles.geometry.attributes.position.array;
+                for(let i=0; i<particleCount; i++) {
+                    positions[i*3] += pVel[i].x;
+                    positions[i*3+1] += pVel[i].y;
+                    positions[i*3+2] += pVel[i].z;
+
+                    if (positions[i*3+1] < -3) { // 파티클 리셋
+                        positions[i*3] = (Math.random() - 0.5) * 0.2;
+                        positions[i*3+1] = 0;
+                        positions[i*3+2] = (Math.random() - 0.5) * 0.2;
+                    }
+                }
+                waterParticles.geometry.attributes.position.needsUpdate = true;
+
+            } else if (currentAction === 'physics') {
+                // 물리 자극: 헤드가 진동하며 아래로 내려와 식물 건드림(시뮬레이션)
+                targetHeadY = 3.5;
+                head.rotation.x = THREE.MathUtils.lerp(head.rotation.x, 0, 0.1);
+                head.rotation.z = THREE.MathUtils.lerp(head.rotation.z, 0, 0.1);
+                
+                if (Math.abs(head.position.y - 3.5) < 0.1) {
+                    targetHeadX = Math.sin(time * 30) * 0.1; // 미세 진동
+                    // 식물도 같이 진동
+                    plantGroup.rotation.z = Math.sin(time * 30) * 0.02;
+                }
+            } else {
+                // Idle
+                targetHeadY = 4.0 + Math.sin(time * 2) * 0.1; // 숨쉬는 듯한 상하 이동
+                head.rotation.x = THREE.MathUtils.lerp(head.rotation.x, 0, 0.1);
+                head.rotation.z = THREE.MathUtils.lerp(head.rotation.z, 0, 0.1);
+                lightBeam.material.opacity = THREE.MathUtils.lerp(lightBeam.material.opacity, 0, 0.1);
+                waterParticles.material.opacity = THREE.MathUtils.lerp(waterParticles.material.opacity, 0, 0.1);
+                plantGroup.rotation.z = THREE.MathUtils.lerp(plantGroup.rotation.z, 0, 0.1);
+            }
+
+            // 부드러운 위치 보간
+            head.position.y = THREE.MathUtils.lerp(head.position.y, targetHeadY, 0.05);
+            head.position.x = THREE.MathUtils.lerp(head.position.x, targetHeadX, 0.2);
+            // Arm Inner 늘어나기 (Y scale adjustments based on head Y)
+            const extension = 4.0 - head.position.y;
+            armInner.scale.y = 1 + extension;
+            armInner.position.y = 5.0 - (extension * 1.0);
+
+            renderer.render(scene, camera);
+        }
+
+        render();
+
+        // Window resize handling
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+
+        // --- 6. UI Interactions & Data Flow Logic ---
+        
+        const btnLight = document.getElementById('btn-light');
+        const btnWater = document.getElementById('btn-water');
+        const btnPhysics = document.getElementById('btn-physics');
+        
+        // Data UI Elements
+        const dot200 = document.getElementById('dot-200');
+        const dot300 = document.getElementById('dot-300');
+        const dot400 = document.getElementById('dot-400');
+        const statLabel = document.getElementById('stat-label');
+        const statVal = document.getElementById('stat-val');
+        const statBar = document.getElementById('stat-bar');
+        const predNitrate = document.getElementById('pred-nitrate');
+        const predTransplant = document.getElementById('pred-transplant');
+        const scoreVal = document.getElementById('score-val');
+        const controlMsg = document.getElementById('control-msg');
+        const controlOverlay = document.getElementById('control-overlay');
+
+        function resetUI() {
+            dot200.classList.remove('bg-emerald-400', 'shadow-[0_0_10px_#34d399]');
+            dot300.classList.remove('bg-emerald-400', 'shadow-[0_0_10px_#34d399]');
+            dot400.classList.remove('bg-emerald-400', 'shadow-[0_0_10px_#34d399]');
+            dot200.classList.add('bg-slate-200');
+            dot300.classList.add('bg-slate-200');
+            dot400.classList.add('bg-slate-200');
+            
+            statBar.style.width = '0%';
+            statVal.innerText = '0.00';
+            predNitrate.innerText = '-- ppm';
+            predNitrate.classList.remove('text-emerald-500');
+            predTransplant.innerText = '-- %';
+            predTransplant.classList.remove('text-blue-500');
+            scoreVal.innerText = '-- / 100';
+            
+            controlMsg.innerHTML = '<i class="ph ph-shield-warning mr-2 text-lg"></i> 대기 상태';
+            controlMsg.className = 'text-sm font-medium text-slate-400 z-10 relative flex items-center';
+            controlOverlay.style.opacity = 0;
+        }
+
+        function triggerPipeline(type) {
+            resetUI();
+            
+            // Disable buttons temporarily
+            btnLight.disabled = true; btnWater.disabled = true; btnPhysics.disabled = true;
+            
+            // 1. Stimulus Action
+            currentAction = type;
+            
+            // 2. Module 200 Analysis (delay 1.5s)
+            setTimeout(() => {
+                dot200.classList.remove('bg-slate-200');
+                dot200.classList.add('bg-emerald-400', 'shadow-[0_0_10px_#34d399]');
+                
+                if(type === 'light') {
+                    statLabel.innerText = "PRI 광화학반사지수 회복";
+                    statBar.style.width = "78%";
+                    statVal.innerText = "0.78 /s";
+                } else if(type === 'water') {
+                    statLabel.innerText = "편광/열 반응 회복 속도";
+                    statBar.style.width = "65%";
+                    statVal.innerText = "0.65 /s";
+                } else {
+                    statLabel.innerText = "잎 미세 움직임 감쇠";
+                    statBar.style.width = "88%";
+                    statVal.innerText = "0.88 /s";
+                }
+            }, 1500);
+
+            // 3. Module 300 Prediction (delay 3s)
+            setTimeout(() => {
+                dot300.classList.remove('bg-slate-200');
+                dot300.classList.add('bg-emerald-400', 'shadow-[0_0_10px_#34d399]');
+                
+                let nValue, tValue;
+                if(type === 'light') { nValue = 1240; tValue = 85; }
+                else if(type === 'water') { nValue = 1180; tValue = 92; }
+                else { nValue = 1310; tValue = 88; }
+
+                // Count up animation
+                let counter = 0;
+                const interval = setInterval(() => {
+                    counter += 5;
+                    predNitrate.innerText = Math.min(nValue, counter * 20) + ' ppm';
+                    predTransplant.innerText = Math.min(tValue, counter * 1.5).toFixed(1) + ' %';
+                    if (counter * 1.5 >= tValue) {
+                        clearInterval(interval);
+                        predNitrate.innerText = nValue + ' ppm';
+                        predTransplant.innerText = tValue + ' %';
+                        predNitrate.classList.add('text-emerald-500');
+                        predTransplant.classList.add('text-blue-500');
+                    }
+                }, 30);
+            }, 3000);
+
+            // 4. Module 400 Control (delay 4.5s)
+            setTimeout(() => {
+                dot400.classList.remove('bg-slate-200');
+                dot400.classList.add('bg-emerald-400', 'shadow-[0_0_10px_#34d399]');
+                
+                const score = Math.floor(Math.random() * 10) + 85; // 85~94
+                scoreVal.innerText = score + ' / 100';
+                
+                if(score >= 80) { // 임계값 초과
+                    controlOverlay.classList.remove('bg-red-500');
+                    controlOverlay.classList.add('bg-emerald-500');
+                    controlOverlay.style.opacity = 0.2;
+                    controlMsg.innerHTML = '<i class="ph ph-check-circle mr-2 text-lg"></i> 신뢰도 충족. 최적 관수 및 양액 제어 실행';
+                    controlMsg.className = 'text-sm font-medium text-emerald-300 z-10 relative flex items-center';
+                } else {
+                    controlOverlay.classList.remove('bg-emerald-500');
+                    controlOverlay.classList.add('bg-red-500');
+                    controlOverlay.style.opacity = 0.2;
+                    controlMsg.innerHTML = '<i class="ph ph-warning-circle mr-2 text-lg"></i> 신뢰도 미달. 관리자 확인 필요';
+                    controlMsg.className = 'text-sm font-medium text-red-300 z-10 relative flex items-center';
+                }
+            }, 4500);
+
+            // End action
+            setTimeout(() => {
+                currentAction = 'idle';
+                btnLight.disabled = false; btnWater.disabled = false; btnPhysics.disabled = false;
+            }, 6000);
+        }
+
+        btnLight.addEventListener('click', () => triggerPipeline('light'));
+        btnWater.addEventListener('click', () => triggerPipeline('water'));
+        btnPhysics.addEventListener('click', () => triggerPipeline('physics'));
+
+    </script>
+</body>
+</html>

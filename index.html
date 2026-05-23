@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes" />
+<title>LEADPART — Every Smart-Farm Starts Right</title>
+<meta name="Author" content="LEADPART" />
+
+<link rel="icon" type="image/png" href="images/common/favicon.png" />
+<link rel="stylesheet" type="text/css" href="css/swiper.min.css" />
+<link rel="stylesheet" type="text/css" href="en/css/common.css" />
+<link rel="stylesheet" type="text/css" href="en/css/index_pc.css" media="screen and (min-width:1400px)" />
+<link rel="stylesheet" type="text/css" href="en/css/index_tablet.css" media="screen and (min-width:813px) and (max-width:1399px)" />
+<link rel="stylesheet" type="text/css" href="en/css/index_mobile.css" media="screen and (max-width:812px)" />
+<link rel="stylesheet" type="text/css" href="en/css/slideSwip1.css" />
+
+<script src="//code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js"></script>
+<script src="js/jquery.easing.1.3.js"></script>
+<script src="js/swiper.js"></script>
+<script src="js/splitting.min.js"></script>
+<script src="js/TweenMax.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.4/dist/lenis.min.js"></script>
+<script src="https://unpkg.com/split-type"></script>
+<script src="//code.jquery.com/ui/1.13.2/jquery-ui.min.js" integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<script language="javascript">
+function setCookie(name,value,expiredays){
+	var todayDate=new Date();todayDate.setDate(todayDate.getDate()+expiredays);
+	document.cookie=name+"="+escape(value)+"; path=/; expires="+todayDate.toGMTString()+";";
+}
+function pop_close(name,idx){setCookie(name,"done",1);$("#layer_pop"+idx).hide();}
+function pop_hide(idx){$("#layer_pop"+idx).hide();}
+$(function(){
+	var pop_move=false;
+	$(".main_layer_popup .pop_link").click(function(){var data=$(this).data("pop_idx");if(!pop_move){pop_hide(data);}});
+	$(".main_layer_popup").draggable({handle:"div.pop_bottom",cursor:"move"});
+});
+</script>
+
+<div id="wrap">
+	<ul class="blind">
+		<li><a href="#contents">본문 바로가기(Skip Contents)</a></li>
+	</ul>
+	<button class="top-btn">
+		<img src="images/common/top_btn.png" alt="위로 가기">
+	</button>
+
+	<a class="floating_btn" href="#">
+		<div class="inner">
+			<img src="images/common/logo.png" alt="LEADPART">
+		</div>
+		<div class="text"><img src="images/common/floating_txt.png" alt=""></div>
+	</a>
+
+	<div id="custom_cursor">
+		<div class="custom_cursor_inner">
+			<div class="custom_hover_circle">
+				<img src="images/common/cursor_arr1.png" alt="">
+				<span>DRAG</span>
+				<img src="images/common/cursor_arr2.png" alt="">
+			</div>
+		</div>
+	</div>
+
+	<div id="header">
+		<div class="head">
+			<h1><a href="#">LEADPART</a></h1>
+			<div class="pcNav">
+				<ul>
+					<li><a href="#" data-scroll="sec-about">ABOUT</a>
+						<div class="sub">
+							<ul>
+								<li><a href="#">Company Overview</a></li>
+								<li><a href="#">Company History</a></li>
+								<li><a href="#">Location</a></li>
+							</ul>
+						</div>
+					</li>
+					<li><a href="#" data-scroll="sec-smartfarm">SMART FARM</a>
+						<div class="sub">
+							<ul>
+								<li><a href="#">Seedling</a></li>
+								<li><a href="#">Seedling Equipment</a></li>
+								<li><a href="#">Vertical Farm Development Project</a></li>
+							</ul>
+						</div>
+					</li>
+					<li><a href="#" data-scroll="sec-portfolio">PORTFOLIO</a>
+						<div class="sub">
+							<ul>
+								<li><a href="#">Case Studies</a></li>
+							</ul>
+						</div>
+					</li>
+					<li><a href="#" data-scroll="sec-strength">STRENGTH</a>
+						<div class="sub">
+							<ul>
+								<li><a href="#">Press Releases</a></li>
+								<li><a href="#">Notice</a></li>
+								<li><a href="#">Media</a></li>
+							</ul>
+						</div>
+					</li>
+					<li><a href="#">PATENT</a>
+						<div class="sub">
+							<ul>
+								<li><a href="#">Online inquiry</a></li>
+								<li><a href="#">FAQ</a></li>
+							</ul>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="gnb">
+				<a class="contact" href="#">
+					<div class="icon">
+						<span></span>
+						<span></span>
+						<span></span>
+					</div>
+					<span>CONTACT</span>
+				</a>
+				<div class="language">
+					<a>EN</a>
+					<ul class="lang_list">
+						<li class="on"><a href="#">KOR</a></li>
+						<li><a href="#">JP</a></li>
+					</ul>
+				</div>
+				<div class="btnMenu">
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="allMenu">
+			<div class="inner">
+				<ul>
+					<li><a>ABOUT</a>
+						<ul>
+							<li><a href="#">Company Overview</a></li>
+							<li><a href="#">Company History</a></li>
+							<li><a href="#">Location</a></li>
+						</ul>
+					</li>
+					<li><a>SMART FARM</a>
+						<ul>
+							<li><a href="#">Seedling</a></li>
+							<li><a href="#">Seedling Equipment</a></li>
+							<li><a href="#">Vertical Farm Development Project</a></li>
+						</ul>
+					</li>
+					<li><a>PORTFOLIO</a>
+						<ul>
+							<li><a href="#">Case Studies</a></li>
+						</ul>
+					</li>
+					<li><a>STRENGTH</a>
+						<ul>
+							<li><a href="#">Press Releases</a></li>
+							<li><a href="#">Notice</a></li>
+							<li><a href="#">Media</a></li>
+						</ul>
+					</li>
+					<li><a>PATENT</a>
+						<ul>
+							<li><a href="#">Online inquiry</a></li>
+							<li><a href="#">FAQ</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div><!-- //header -->
+
+	<div id="container">
+	<div id="contents">
+
+	<!-- Section 1: Hero Video -->
+	<div class="section section1">
+		<div class="swiper-container visual">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide v1">
+					<div class="vwrap">
+						<video src="main.mp4" autoplay loop muted playsinline webkit-playsinline data-keepplaying>
+						  <a href="main.mp4">download it</a>
+						</video>
+					</div>
+					<div class="txtwrap">
+						<div class="en">Every Smart-Farm <br class="pcbr">Starts Right</div>
+						<div class="kr">
+							<h2><span>스마트팜 육묘의 새로운 표준, 리드파트</span></h2>
+							<div class="line"></div>
+							<h3><span>흙 없이 키우는 스마트한 첫 수확의 시작 —<br>
+							설치형 육묘 모듈부터 실시간 제어 시스템까지,<br>
+							이제 첫 수확을 30일 더 빠르게 경험하세요</span></h3>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ctr">
+				<div class="vprev"></div>
+				<div class="vpaging"></div>
+				<div class="vnext"></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Section 2: Overview -->
+	<div id="sec-about" class="section section2">
+		<div class="innerwrap">
+			<div class="txtwrap">
+				<h2>OVERVIEW</h2>
+				<h3>
+					스마트팜의 시작부터<br>
+					바꾸기 위해<br>
+					리드파트가 시작됐습니다.
+				</h3>
+				<p>
+					스마트팜 창업에는 수억 원이 투입되지만, 대부분 토지와 시설에 집중돼<br class="pcbr">
+					정작 생육에 가장 핵심 요소인 모종에는 투자되지 않습니다.<br class="pcbr">
+					리드파트는 흙 없는 모종과 설치형 육묘 모듈, 실시간 제어 시스템까지<br class="pcbr">
+					차세대 스마트 육묘 솔루션 전체를 하나로 제공합니다.
+				</p>
+			</div>
+			<div class="img"><img src="images/main/sec2_img.jpg" alt=""></div>
+		</div>
+	</div>
+
+	<!-- Section 3: Smart Farm Scroll -->
+	<div id="sec-smartfarm" class="section section3">
+		<div class="conwrap">
+			<div class="boxwrap box1">
+				<div class="bg"></div>
+				<div class="con">
+					<div class="sticky">
+						<div class="count">
+							<span>01</span>&nbsp;&nbsp;/&nbsp;&nbsp;03
+						</div>
+						<div class="scroll">(&nbsp;&nbsp;Keep Scrolling&nbsp;&nbsp;)</div>
+						<div class="inner">
+							<div class="txtarea">
+								<h2>SMART FARM</h2>
+								<h3>육묘시설 H/W</h3>
+								<p>
+									단 하루 만에 설치 가능한 20m² 표준 육묘장.
+									<br class="pcbr">
+									LED · 프레임 · 육묘베드 일체형 구조로
+									<br class="pcbr">
+									양액공급장치·센서·제어장치까지 통합 제공합니다.
+								</p>
+								<a class="btn" href="#">
+									<span>View More</span><div class="arr"><i></i></div>
+								</a>
+							</div>
+							<div class="imgarea">
+								<div></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="boxwrap box2">
+				<div class="bg"></div>
+				<div class="con">
+					<div class="sticky">
+						<div class="count">
+							<span>02</span>&nbsp;&nbsp;/&nbsp;&nbsp;03
+						</div>
+						<div class="scroll">(&nbsp;&nbsp;Keep Scrolling&nbsp;&nbsp;)</div>
+						<div class="inner">
+							<div class="txtarea">
+								<h2>SMART FARM</h2>
+								<h3>배지·종자 구독</h3>
+								<p>
+									암면·피트·스펀지 등 매체별 최적 무토양 모종을
+									<br class="pcbr">
+									정기 배송합니다. 바이오차 탄소절감 배지·양액·
+									<br class="pcbr">
+									소모품까지 반복 공급하는 구독 모델입니다.
+								</p>
+								<a class="btn" href="#">
+									<span>View More</span><div class="arr"><i></i></div>
+								</a>
+							</div>
+							<div class="imgarea">
+								<div></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="boxwrap box3">
+				<div class="bg"></div>
+				<div class="con">
+					<div class="sticky">
+						<div class="count">
+							<span>03</span>&nbsp;&nbsp;/&nbsp;&nbsp;03
+						</div>
+						<div class="scroll">(&nbsp;&nbsp;Keep Scrolling&nbsp;&nbsp;)</div>
+						<div class="inner">
+							<div class="txtarea">
+								<h2>SMART FARM</h2>
+								<h3>
+									ICT 생육관리<br>
+									S/W
+								</h3>
+								<p>
+									온습도·pH·EC·광량 실시간 모니터링과
+									<br class="pcbr">
+									자동 알림, 원격 제어까지. 종자·배지·출하
+									<br class="pcbr">
+									이력을 데이터로 관리하는 스마트 앱입니다.
+								</p>
+								<a class="btn" href="#">
+									<span>View More</span><div class="arr"><i></i></div>
+								</a>
+							</div>
+							<div class="imgarea">
+								<div></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Section 4: Portfolio -->
+	<div id="sec-portfolio" class="section section4 ani">
+		<div class="circle"></div>
+		<div class="innerwrap">
+			<div class="section_tit ani">
+				<h3>PORTFOLIO</h3>
+				<p>
+					<span>현장에서 검증된 스마트 육묘 솔루션</span>
+				</p>
+			</div>
+
+			<div class="swip">
+			<div class="slideSwip slider-container loading">
+				<div class="slide-wrapper">
+					<div class="slide current">
+						<a>
+						<div class="img">
+							<div style="background:url(data/main/portfolio1.jpg) no-repeat center/cover;"></div>
+						</div>
+						<div class="slide-content">
+							<h2 class="slide-title"><span data-splitting>농업회사법인(주)*린</span></h2>
+							<dl class="slide-info">
+								<dd>설치형 육묘 모듈 · 다단 LED 육묘베드 · 스마트팜 시설 일괄 시공</dd>
+							</dl>
+						</div>
+						</a>
+					</div>
+					<div class="slide">
+						<a>
+						<div class="img">
+							<div style="background:url(data/main/portfolio2.jpg) no-repeat center/cover;"></div>
+						</div>
+						<div class="slide-content">
+							<h2 class="slide-title"><span data-splitting>(주)**미팜</span></h2>
+							<dl class="slide-info">
+								<dd>육묘다단 랙 설치 · 양액 배관 시공 · 무토양 모종 정기 구독</dd>
+							</dl>
+						</div>
+						</a>
+					</div>
+					<div class="slide">
+						<a>
+						<div class="img">
+							<div style="background:url(data/main/portfolio3.jpg) no-repeat center/cover;"></div>
+						</div>
+						<div class="slide-content">
+							<h2 class="slide-title"><span data-splitting>(주)**닝팜</span></h2>
+							<dl class="slide-info">
+								<dd>체험형 수직농장 설계 · LED 조명 시공 · ICT 환경제어 연동</dd>
+							</dl>
+						</div>
+						</a>
+					</div>
+				</div>
+
+				<button class="nav-btn prev-btn">
+					<div class="inner">
+						<div class="gprev"></div>
+						<dl>
+							<dt>PREV</dt>
+							<dd class="prev-title"></dd>
+						</dl>
+					</div>
+				</button>
+				<button class="nav-btn next-btn">
+					<div class="inner">
+						<dl>
+							<dt>NEXT</dt>
+							<dd class="next-title"></dd>
+						</dl>
+						<div class="gnext"></div>
+					</div>
+				</button>
+			</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Section 5: Merit -->
+	<div id="sec-strength" class="section section5">
+		<div class="bg"></div>
+		<div class="innerwrap">
+			<div class="section_tit wh ani">
+				<h3>MERIT</h3>
+				<p>
+					<span>시설·소모품·데이터를 통합한 풀스택 스마트 육묘 인프라</span>
+				</p>
+			</div>
+			<div class="ccwrap ani">
+				<div class="cc">
+					<div class="inner">
+						<div class="icon icon1"></div>
+						<div class="tit">무토양 클린<br>스타트</div>
+						<p>
+							흙 없는 수경 대응 모종으로<br class="pcbr">
+							배관 막힘·병해 유입을 원천 차단.<br class="pcbr">
+							시설 오염 리스크 없이<br class="pcbr">
+							첫날부터 안정적인 운영이 가능합니다.
+						</p>
+					</div>
+				</div>
+				<div class="cc">
+					<div class="inner">
+						<div class="icon icon2"></div>
+						<div class="tit">
+							데이터 기반<br>
+							생육 진단 (특허출원)
+						</div>
+						<p>
+							다중 자극 반응 속도 분석으로<br class="pcbr">
+							모종의 생리 상태를 정밀 진단.<br class="pcbr">
+							이식 적기 예측과 양액·광량<br class="pcbr">
+							자동제어까지 지원합니다.
+						</p>
+					</div>
+				</div>
+				<div class="cc">
+					<div class="inner">
+						<div class="icon icon3"></div>
+						<div class="tit">
+							첫 수확<br>
+							30일 단축
+						</div>
+						<p>
+							균일한 묘 품질과 정밀한 정식 시점<br class="pcbr">
+							판단으로 수확 지연을 최소화.<br class="pcbr">
+							창업 첫 해부터 흑자 전환을<br class="pcbr">
+							실현한 검증된 모델입니다.
+						</p>
+					</div>
+				</div>
+				<div class="cc">
+					<div class="inner">
+						<div class="icon icon4"></div>
+						<div class="tit">
+							시설·소모품·데이터<br>
+							풀스택 통합
+						</div>
+						<p>
+							H/W 시설 판매 → 종자·배지 정기<br class="pcbr">
+							구독 → ICT 데이터 서비스로 이어지는<br class="pcbr">
+							반복 매출 플라이휠.<br class="pcbr">
+							업계 유일의 풀스택 사업자입니다.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	</div><!-- //contents -->
+	</div><!-- //container -->
+
+	<div id="footer">
+		<div class="foot">
+		<div class="top">
+			<ul class="sns"></ul>
+		</div>
+		<div class="ft_inner">
+			<div class="left">
+				<div class="ft_logo"><img src="images/common/ft_logo.png" alt="LEADPART"></div>
+				<div class="infowrap">
+					<div>
+						<dl>
+							<dt>Company Name</dt>
+							<dd>㈜리드파트 · LEADPART Co., Ltd.</dd>
+						</dl>
+						<dl>
+							<dt>Address</dt>
+							<dd>부산광역시 부산진구 부전로 144-3 4층</dd>
+						</dl>
+					</div>
+					<div>
+						<dl>
+							<dt>EMAIL</dt>
+							<dd>info@frontealer.com</dd>
+						</dl>
+						<dl>
+							<dt>FAX</dt>
+							<dd>0504-337-5327</dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+			<div class="copy">
+				COPYRIGHT ⓒ 2026 LEADPART ALL RIGHTS RESERVED.<br>
+				Every Smart-Farm Starts Right
+			</div>
+		</div>
+		</div>
+	</div><!-- //footer -->
+</div><!-- //wrap -->
+
+<script type="text/javascript" src="en/js/common.js"></script>
+<script type="text/javascript" src="en/js/main.js"></script>
+<script type="text/javascript" src="en/js/slideSwip1.js"></script>
+
+<script>
+$(function(){
+	$('[data-scroll]').on('click', function(e){
+		e.preventDefault();
+		var target = $('#' + $(this).data('scroll'));
+		if(target.length){
+			$('html, body').animate({ scrollTop: target.offset().top }, 800, 'easeInOutCubic');
+		}
+	});
+});
+</script>
+
+</body>
+</html>
